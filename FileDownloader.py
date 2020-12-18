@@ -10,12 +10,16 @@ r = requests.get(url)
 #TODO: Create the @Addon directory (eg.@ace3) (the directory will be granted by the xml with list of addons)
 #TODO: Create the Subdiretory in @Addon (eg. @ace3/assets) (the subdirectory name will be granted by the xml with list of addons)
 #TODO: Name the file in the same way as specified in the xml list of addons
+#TODO: Check if forward slashes work on Windows aswell
+#TODO: Optimize the download to not always download the entire file but just the changed parts if possible 
 #Write the file to prespecified path by user
 with open('/tmp/authors.txt', 'wb') as f:
     f.write(r.content)
 
 # Retrieve HTTP meta-data
-#TODO delete this shit as it is unnecessary
+#TODO: move this as it is unnecessary here (maybe leave status code for some initial check of the repository, this however will be done in when the repository will be downloaded)
 print(r.status_code)
+#TODO: delete this
 print(r.headers['content-type'])
+#TODO: move this as it is unnecessary here (maybe leave status code for some initial check of the repository, this however will be done in when the repository will be downloaded)
 print(r.encoding)
