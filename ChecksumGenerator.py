@@ -49,7 +49,4 @@ def RepositoryGenerator(repository_name, source_addon_directory, checksum_output
 repository_name = '%s' % (sys.argv[1])
 source_addon_directory = '%s' % (sys.argv[2])
 checksum_output_destination = '%s' % (sys.argv[3])
-#print(repository_name)
-#print(source_addon_directory)
-#print(checksum_output_destination)
 RepositoryGenerator(repository_name, source_addon_directory, checksum_output_destination)

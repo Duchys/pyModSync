@@ -4,4 +4,5 @@
 
 #Possible checks:
 #checksum (provide checksum generator for repo)
-
+#TODO: Compare checksums
+#TODO: Make this a function to be used to compare downloaded repository
