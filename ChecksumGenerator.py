@@ -20,7 +20,7 @@
 #official/@AGM
 #   official/@AGM/modfilea.pbo checksum
 #   official/@AGM/modfilea.pbo checksum
-
+import sys
 #Based on this output addons @ACE, @TFAR, @AGM will be enabled.
 def RepositoryGenerator(repository_name, source_addon_directory, checksum_output_destination):
     import csv
@@ -31,7 +31,6 @@ def RepositoryGenerator(repository_name, source_addon_directory, checksum_output
     def file_hash_hex(file_path, hash_func):
         with open(file_path, 'rb') as f:
             return hash_func(f.read()).hexdigest()
-#TODO: Get rid of subdirs.
     def sorted_file_listing(base_dir):
         for directory, subdirs, files in sorted(os.walk(base_dir)):
             for filename in files:
@@ -47,7 +46,10 @@ def RepositoryGenerator(repository_name, source_addon_directory, checksum_output
             writer.writerow((directory.replace(source_addon_directory,''), filename, file_hash_hex(path, hashlib.blake2b)))
     print(f'Checksum was succesfully generated to {checksum_output_destination}')
 
-repository_name = '417RCT Official Repository'
-source_addon_directory = '/mnt/ssd/417addons/'
-checksum_output_destination = '/tmp/checksums_archive5.csv'
+repository_name = '%s' % (sys.argv[1])
+source_addon_directory = '%s' % (sys.argv[2])
+checksum_output_destination = '%s' % (sys.argv[3])
+#print(repository_name)
+#print(source_addon_directory)
+#print(checksum_output_destination)
 RepositoryGenerator(repository_name, source_addon_directory, checksum_output_destination)
