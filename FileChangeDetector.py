@@ -4,5 +4,4 @@
 
 #Possible checks:
 #checksum (provide checksum generator for repo)
-filecmp.cmp()
 

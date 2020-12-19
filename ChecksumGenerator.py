@@ -26,6 +26,7 @@ import csv
 import hashlib
 import os
 #TODO: Get someone who knows what he is doing, and not just doing CTRL + C from the web until it starts working...
+print('this will take some time, go and grab a coffee')
 def file_hash_hex(file_path, hash_func):
     with open(file_path, 'rb') as f:
         return hash_func(f.read()).hexdigest()
@@ -37,8 +38,9 @@ def recursive_file_listing(base_dir):
 #TODO: take this path from current dir/fitler out unnecessary stuff
 #TODO: add comments so it seems like i know what I'm doing
 src_dir = '/mnt/ssd/417addons/'
-
-with open('/tmp/checksums_archive4.csv', 'w') as f:
+checksum_destination_directory='/tmp/checksums_archive4.csv'
+with open(checksum_destination_directory, 'w') as f:
     writer = csv.writer(f, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     for directory, filename, path in recursive_file_listing(src_dir):
         writer.writerow((directory, filename, file_hash_hex(path, hashlib.blake2b)))
+print(f'Checksum was succesfully generated to {checksum_destination_directory}')
