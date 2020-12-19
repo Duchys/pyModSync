@@ -30,7 +30,7 @@ print('this will take some time, go and grab a coffee')
 def file_hash_hex(file_path, hash_func):
     with open(file_path, 'rb') as f:
         return hash_func(f.read()).hexdigest()
-
+#TODO: Get rid of subdirs.
 def recursive_file_listing(base_dir):
     for directory, subdirs, files in os.walk(base_dir):
         for filename in files:
