@@ -32,7 +32,7 @@ def file_hash_hex(file_path, hash_func):
         return hash_func(f.read()).hexdigest()
 #TODO: Get rid of subdirs.
 def recursive_file_listing(base_dir):
-    for directory, subdirs, files in os.walk(base_dir):
+    for directory, subdirs, files in sorted(os.walk(base_dir)):
         for filename in files:
             yield directory, filename, os.path.join(directory, filename)
 #TODO: take this path from current dir/fitler out unnecessary stuff
