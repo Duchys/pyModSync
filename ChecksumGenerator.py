@@ -12,14 +12,14 @@
 
 #The following will be generated
 #official/@ACE
-#   official/@ACE/modfilea.pbo  checksum
-#   official/@ACE/modfileb.pbo  checksum
+#official/@ACE/modfilea.pbo  checksum
+#official/@ACE/modfileb.pbo  checksum
 #official/@TFAR
-#   official/@TFAR/modfilea.pbo checksum
-#   official/@TFAR/modfilea.pbo checksum
+#official/@TFAR/modfilea.pbo checksum
+#official/@TFAR/modfilea.pbo checksum
 #official/@AGM
-#   official/@AGM/modfilea.pbo checksum
-#   official/@AGM/modfilea.pbo checksum
+#official/@AGM/modfilea.pbo checksum
+#official/@AGM/modfilea.pbo checksum
 import sys
 #Based on this output addons @ACE, @TFAR, @AGM will be enabled.
 def RepositoryGenerator(repository_name, source_addon_directory, checksum_output_destination):
