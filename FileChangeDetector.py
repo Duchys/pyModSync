@@ -3,6 +3,6 @@
 #If a file is missing, provide the link to the file to the FileDownloader
 
 #Possible checks:
-#checksum (preffered, currently not provided by the Almighty Arcanum)
-#filesize (cannot be the only check for file change as it is not 100% way to check for file difference)
-#modifytime (currently provided by the Almighty Arcanum) >>> Verify if this can be compared with the old repository xml file
+#checksum (provide checksum generator for repo)
+filecmp.cmp()
+

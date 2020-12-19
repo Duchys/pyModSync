@@ -4,7 +4,7 @@ def FileDownloader(file_url,file_destination_path):
     from clint.textui import progress
 #TODO: print which file is being downloaded
 #Print Addon>filename is being downloaded 
-    print('Starting the download of @ace3/authors.txt')
+    print('Starting the download of @brf/index.txt')
 #TODO: Add configuration option which allows insecure downloads (incase self signed certs are user [or addon repository has expired certificate])
 #TODO: Rename this variable
     file_stream = requests.get(file_url, stream=True)

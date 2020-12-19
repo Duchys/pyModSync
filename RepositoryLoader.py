@@ -1,9 +1,9 @@
-#GOAL: The goal of this class is to check if the repository file has changed
+#GOAL: The goal of this function is to check if the repository file has changed
 #(and possibly store it to compare changes>check with Arcanum, on how the current launcher is handled)
 #After the repository is downloaded provide the output of the repository.xml file to FileChangeDetector
 from FileDownloader import FileDownloader
-#TODO: Call this class on start of the application
-#TODO: Call this class on each check request by the user
+#TODO: Call this function on start of the application
+#TODO: Call this function on each check request by the user
 #TODO: find an alternative which works with GUI aswell
 #TODO: print which file is being downloaded
 #Print $repo_url is being downloaded
