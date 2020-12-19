@@ -2,9 +2,7 @@ def FileDownloader(file_url,file_destination_path):
     import requests
 #TODO: find an alternative which works with GUI aswell
     from clint.textui import progress
-#Print Addon>filename is being downloaded 
 #TODO: Add configuration option which allows insecure downloads (incase self signed certs are user [or addon repository has expired certificate])
-#TODO: Rename this variable
     file_stream = requests.get(file_url, stream=True)
     print(file_stream.status_code)
 #TODO: Set this based on the repository output
