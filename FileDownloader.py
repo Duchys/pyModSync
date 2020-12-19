@@ -2,9 +2,7 @@ def FileDownloader(file_url,file_destination_path):
     import requests
 #TODO: find an alternative which works with GUI aswell
     from clint.textui import progress
-#TODO: print which file is being downloaded
 #Print Addon>filename is being downloaded 
-    print('Starting the download of @brf/index.txt')
 #TODO: Add configuration option which allows insecure downloads (incase self signed certs are user [or addon repository has expired certificate])
 #TODO: Rename this variable
     file_stream = requests.get(file_url, stream=True)
@@ -22,10 +20,10 @@ def FileDownloader(file_url,file_destination_path):
 
 
     with open(file_destination_path, 'wb') as downloaded_file:
+        print(f'Starting file download from {file_url}')
         total_length = int(file_stream.headers.get('content-length'))
         for chunk in progress.bar(file_stream.iter_content(chunk_size=1024), expected_size=(total_length/1024) + 1):
             if chunk:
                 downloaded_file.write
                 downloaded_file.flush
-
-    print('File Downloaded successfuly')
+    print(f'File Downloaded from {file_url} was finished')
