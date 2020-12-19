@@ -14,5 +14,5 @@ repository_url = 'https://a3.417rct.org/addons/index.xml'
 repository_destination_path = '/tmp/repo.xml'
 #TODO: Allow user to specifiy the path
 #TODO: Check if forward slashes work on Windows aswell @Furi
-#Write the file to prespecified path by user
+#Start download of the repository and store it in the repository_destination_path
 FileDownloader(repository_url, repository_destination_path)
