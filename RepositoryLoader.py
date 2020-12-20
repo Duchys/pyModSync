@@ -10,11 +10,13 @@ from FileDownloader import file_downloader
 #TODO: Make this configurable by user in the GUI/Configuration
 #TODO: Store recent repositories in a config file to easier switching (nice to have)
 #TODO: Make sure that the program does not crash when a link to invalid repository is provided
-repository_url = 'https://a3.417rct.org/addons/index.xml'
-repository_destination_path = '/tmp/repo.xml'
-#TODO: Allow user to specifiy the path
-#TODO: Check if forward slashes work on Windows aswell @Furi
+#TENHLE FILE JE VLASTNĚ ÚPLNĚ K HOVNU
+remote_repository_url = ''
+remote_repository_destination_path = ''
+def repository_downloader(remote_repository_url, remote_repostiory_destination_path):
+    file_downloader(remote_repository_url, remote_repostiory_destination_path)
+
 #Start download of the repository and store it in the repository_destination_path
-file_downloader(repository_url, repository_destination_path)
+
 
 #TODO: Check if the has changed from the previous time the repository was downloaded (nice to have)
