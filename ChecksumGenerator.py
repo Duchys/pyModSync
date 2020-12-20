@@ -22,7 +22,7 @@
 #official/@AGM/modfilea.pbo checksum
 import sys
 #Based on this output addons @ACE, @TFAR, @AGM will be enabled.
-def RepositoryGenerator(repository_name, source_addon_directory, checksum_output_destination):
+def repository_generator(repository_name, source_addon_directory, checksum_output_destination):
     import csv
     import hashlib
     import os
@@ -49,4 +49,4 @@ def RepositoryGenerator(repository_name, source_addon_directory, checksum_output
 repository_name = '%s' % (sys.argv[1])
 source_addon_directory = '%s' % (sys.argv[2])
 checksum_output_destination = '%s' % (sys.argv[3])
-RepositoryGenerator(repository_name, source_addon_directory, checksum_output_destination)
+repository_generator(repository_name, source_addon_directory, checksum_output_destination)

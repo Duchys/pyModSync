@@ -1,4 +1,4 @@
-def FileDownloader(file_url,file_destination_path):
+def file_download(file_url,file_destination_path):
     import requests
 #TODO: find an alternative which works with GUI aswell
     from clint.textui import progress
