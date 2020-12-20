@@ -17,5 +17,5 @@ def check_for_update(local_repository, remote_repository_destination_path, repos
     if not os.stat(repository_difference_outfile).st_size == 0:
         print ('Change between local and remote repository was detected')
     else:
-        print ('No change between local and remote repository was deteceted')
-    
+        
+        print ('No change between local and remote repository was detected')
