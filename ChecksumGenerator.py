@@ -43,10 +43,10 @@ def repository_generator(repository_name, source_addon_directory, checksum_outpu
         writer.writerow(["#DO NOT INSERT ANYTHING ABOVE THIS LINE"])
         writer = csv.writer(f, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for directory, filename, path in sorted_file_listing(source_addon_directory):
-            writer.writerow((directory.replace(source_addon_directory,''), filename, file_hash_hex(path, hashlib.blake2b)))
+            writer.writerow((path.replace(source_addon_directory,''), file_hash_hex(path, hashlib.blake2b)))
     print(f'Checksum was succesfully generated to {checksum_output_destination}')
 
 repository_name = '%s' % (sys.argv[1])
-source_addon_directory = '%s' % (sys.argv[2])
+source_addon_directory = '%s/' % (sys.argv[2])
 checksum_output_destination = '%s' % (sys.argv[3])
 repository_generator(repository_name, source_addon_directory, checksum_output_destination)
