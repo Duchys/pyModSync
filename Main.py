@@ -3,7 +3,7 @@ from CheckForUpdate import compare_repositories
 from CheckForUpdate import check_for_update
 #TODO: Allow user to specifiy the path
 #TODO: Check if forward slashes work on Windows aswell @Furi
-remote_repository_url = 'https://a3.417rct.org/addons/pymodsyncrepo.csv'
+#remote_repository_url = 'https://a3.417rct.org/addons/pymodsyncrepo.csv'
 remote_repository_destination_path = '/home/duchys/Documents/fakeremoterepo.csv'
 #Download repository
 #repository_downloader(remote_repository_url, remote_repository_destination_path)

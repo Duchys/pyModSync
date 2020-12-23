@@ -1,6 +1,6 @@
 
 
-
+#TODO: Add comments
 def compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile):
         with open(local_repository, 'r') as t1, open(remote_repository_destination_path, 'r') as t2:
             file_one = t1.readlines()
