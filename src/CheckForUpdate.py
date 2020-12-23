@@ -4,7 +4,7 @@
 def compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile):
         with open(local_repository, 'r') as t1, open(remote_repository_destination_path, 'r') as t2:
             file_one = t1.readlines()
-            file_two = t2.readlines()
+            file_two = t2.readlines()[2:]
 
         with open(repository_difference_outfile, 'w') as out_file:
             for line in file_two:
