@@ -52,11 +52,8 @@ def repository_generator(repository_name, path_to_modlist, source_addon_director
             #Awful hack
             #Prepare string used for validation
             path_validation=path.replace(source_addon_directory,'')
-            print(path_validation)
-            #print(path_validation.startswith(tuple(modlist_processed))
             #If path modified for validation starts with any of strings provided by the modpack.ini file then craete a checksum for it and write it to repository.csv
             if path_validation.startswith(tuple(modlist_processed)):
-                print(path)
                 writer.writerow((path.replace(source_addon_directory,''), file_hash_hex(path, hashlib.blake2b)))
     print(f'Checksum was succesfully generated to {checksum_output_destination}')
 
