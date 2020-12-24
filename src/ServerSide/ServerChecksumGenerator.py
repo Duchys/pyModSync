@@ -40,9 +40,8 @@ def repository_generator(repository_name, path_to_modlist, source_addon_director
             modlist.append(row)
 
     modlist_processed = [x[:-1] for x in modlist]
-    print(modlist_processed[0:])   
 
-    with open(checksum_output_destination, 'w') as f:
+    with open(checksum_output_destination, 'w', newline='') as f:
         print('this will take some time, go and grab a coffee')
         writer = csv.writer(f)
         writer.writerow([repository_name])
