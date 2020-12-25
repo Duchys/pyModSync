@@ -17,6 +17,9 @@ To launch it you have to provide the following 4 arguments:
 
 Example command:
 Windows: 
+
 ```.\ServerChecksumGenerator.exe "Very Cool Repository name" C:\filecontainingmodlist.csv C:\addonfolder C:\output.csv``` 
+
 Linux:
+
 ```python ServerChecksumGenerator.py "Very Cool Repository name" C:\filecontainingmodlist.csv C:\addonfolder C:\output.csv```
