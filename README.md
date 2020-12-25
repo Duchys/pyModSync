@@ -13,6 +13,10 @@ To launch it you have to provide the following 4 arguments:
 1. Repository Name (ie. XY Official Repository)
 2. CSV with mods
 3. Addon path
-4. Output
-C:\Duchy\Duchyhoshit\ServerChecksumGenerator.exe "Duchyhomodpack" C:\Duchy\Duchyhoshit\fakemodlist.csv C:\417addons C:\Duchy\Duchyhoshit\repository.csv
- 
+4. Repository output destionation
+
+Example command:
+Windows: 
+```.\ServerChecksumGenerator.exe "Very Cool Repository name" C:\filecontainingmodlist.csv C:\addonfolder C:\output.csv``` 
+Linux:
+```python ServerChecksumGenerator.py "Very Cool Repository name" C:\filecontainingmodlist.csv C:\addonfolder C:\output.csv```
