@@ -54,7 +54,6 @@ def repository_generator(repository_name, path_to_modlist, source_addon_director
             if path_processed.startswith('/'):
                 path_processed = path_processed[1:]
                 #If path modified for validation starts with any of strings provided by the modpack.ini file then craete a checksum for it and write it to repository.csv
-            print(path_processed)
             if path_processed.startswith(tuple(modlist_processed)):
                     #Removes / from the path incase the path did not end with a /
                 writer.writerow((path_processed, file_hash_hex(path, hashlib.blake2b)))
