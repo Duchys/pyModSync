@@ -4,9 +4,10 @@
 #Repository comparison
 def compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile):
         #Opens repo csv files
-        with open(local_repository, 'r') as t1, open(remote_repository_destination_path, 'r') as t2:
+        with open(local_repository, 'r') as t1:
             local_repo = t1.readlines()
             #skips first 2 lines
+        with open(remote_repository_destination_path, 'r') as t2:
             remote_repo = t2.readlines()[2:]
         #Compares local repository with remote repostitory
         with open(repository_difference_outfile, 'w') as repo_diff:
