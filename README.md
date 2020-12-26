@@ -18,8 +18,8 @@ To launch it you have to provide the following 4 arguments:
 Example command:
 Windows: 
 
-```.\ServerChecksumGenerator.exe "Very Cool Repository name" C:\filecontainingmodlist.csv C:\addonfolder C:\output.csv``` 
+```.\ServerChecksumGenerator.exe "Very Cool Repository name" C:\filecontainingmodlist.csv C:\addonfolder C:\pymodsyncrepo.csv``` 
 
 Linux:
 
-```python ServerChecksumGenerator.py "Very Cool Repository name" C:\filecontainingmodlist.csv C:\addonfolder C:\output.csv```
+```python ServerChecksumGenerator.py "Very Cool Repository name" /srv/pymodsync/filecontainingmodlist.csv /srv/addonfolder /srv/addonfolder/pymodsyncrepo.csv```
