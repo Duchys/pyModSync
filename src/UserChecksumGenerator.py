@@ -30,12 +30,12 @@ def repository_generator(source_addon_directory, checksum_output_destination):
     def sorted_file_listing(base_dir):
         for directory, subdirs, files in sorted(os.walk(base_dir)):
             for filename in files:
-                yield directory, filename, os.path.join(directory, filename)
+                yield os.path.join(directory, filename)
 #TODO: add comments so it seems like i know what I'm doing
-    with open(checksum_output_destination, 'w') as f:
+    with open(checksum_output_destination, 'w', newline='',encoding='utf-8') as f:
         print('this will take some time, go and grab a coffee')
         writer = csv.writer(f)
         writer = csv.writer(f, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        for directory, filename, path in sorted_file_listing(source_addon_directory):
+        for path in sorted_file_listing(source_addon_directory):
             writer.writerow((path.replace(source_addon_directory,''), file_hash_hex(path, hashlib.blake2b)))
     print(f'Checksum was succesfully generated to {checksum_output_destination}')
