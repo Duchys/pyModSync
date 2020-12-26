@@ -24,3 +24,4 @@ def check_for_update(local_repository, remote_repository_destination_path, repos
         print ('Change between local and remote repository was detected')
     else:
         print ('No change between local and remote repository was detected')
+    print('...........................................')
