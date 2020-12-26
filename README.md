@@ -13,7 +13,7 @@ To launch it you have to provide the following 4 arguments:
 1. Repository Name (ie. XY Official Repository)
 2. CSV with mods
 3. Addon path
-4. Repository output destionation
+4. Repository output destionation (the repository should end up in the addons folder)
 
 Example command:
 Windows: 
