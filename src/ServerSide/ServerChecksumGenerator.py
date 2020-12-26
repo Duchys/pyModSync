@@ -50,11 +50,15 @@ def repository_generator(repository_name, path_to_modlist, source_addon_director
         for path in sorted_file_listing(source_addon_directory):
             #Awful hack
             #Prepare string used for validation
-            path_validation=path.replace(source_addon_directory,'')
-            #If path modified for validation starts with any of strings provided by the modpack.ini file then craete a checksum for it and write it to repository.csv
-            if path_validation.startswith(tuple(modlist_processed)):
-                writer.writerow((path.replace(source_addon_directory,''), file_hash_hex(path, hashlib.blake2b)))
-    print(f'Checksum was succesfully generated to {checksum_output_destination}')
+            path_processed=path.replace(source_addon_directory,'')
+            if path_processed.startswith('/'):
+                path_processed = path_processed[1:]
+                #If path modified for validation starts with any of strings provided by the modpack.ini file then craete a checksum for it and write it to repository.csv
+            print(path_processed)
+            if path_processed.startswith(tuple(modlist_processed)):
+                    #Removes / from the path incase the path did not end with a /
+                writer.writerow((path_processed, file_hash_hex(path, hashlib.blake2b)))
+        print(f'Checksum was succesfully generated to {checksum_output_destination}')
 
 repository_name = '%s' % (sys.argv[1])
 path_to_modlist = '%s' % (sys.argv[2])
