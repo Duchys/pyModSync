@@ -43,6 +43,6 @@ def local_repository_generator(source_addon_directory, checksum_output_destinati
                 path_processed = path_processed[1:]
             if path.startswith('\\'):
                 path_processed = path_processed[1:]
-            path_processed = path_processed.replace(os.sep, '/')
+            path_processed = path_processed.replace('\\', '/')
             writer.writerow((path_processed, file_hash_hex(path, hashlib.blake2b)))
     print(f'Checksum was succesfully generated to {checksum_output_destination}')
