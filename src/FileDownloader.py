@@ -1,5 +1,6 @@
 def file_downloader(file_url,file_destination_path):
     import requests
+    import sys
 #TODO: find an alternative which works with GUI aswell
     from clint.textui import progress
 #TODO: Add configuration option which allows insecure downloads (incase self signed certs are user [or addon repository has expired certificate])
@@ -17,12 +18,18 @@ def file_downloader(file_url,file_destination_path):
 #Write the file to prespecified path by user
 
     print('...........................................')
-    with open(file_destination_path, 'wb') as downloaded_file:
-        print(f'Starting file download from {file_url}')
-        total_length = int(file_stream.headers.get('content-length'))
-        for chunk in progress.bar(file_stream.iter_content(chunk_size=1024), expected_size=(total_length/1024) + 1):
-            if chunk:
-                downloaded_file.write
-                downloaded_file.flush
-    print(f'File Downloaded from {file_url} was finished')
+    if file_stream.status_code == 200:
+        with open(file_destination_path, 'wb') as downloaded_file:
+            print(f'URL {file_url} returned status code 200, starting download')
+            total_length = int(file_stream.headers.get('content-length'))
+            for chunk in progress.bar(file_stream.iter_content(chunk_size=1024), expected_size=(total_length/1024) + 1):
+                if chunk:
+                  downloaded_file.write
+                  downloaded_file.flush
+        print(f'File Downloaded from {file_url} was finished')
+    elif file_stream.status_code == 404:
+        sys.exit(f'ERROR: {file_url} not found, status code {file_stream.status_code} returned, exiting...')
+    else:
+        sys.exit(f'ERROR: {file_url} returned status code {file_stream.status_code}, exiting...')
+    
     print('...........................................')
