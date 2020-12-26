@@ -37,9 +37,12 @@ def local_repository_generator(source_addon_directory, checksum_output_destinati
         writer = csv.writer(f)
         writer = csv.writer(f, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for path in sorted_file_listing(source_addon_directory):
-            path_proccessed=path.replace(source_addon_directory,'')
+            path_processed=path.replace(source_addon_directory,'')
             #Removes / from the path incase the path did not end with a /
             if path.startswith('/'):
-                path_proccessed = path_proccessed[1:]
-            writer.writerow((path_proccessed, file_hash_hex(path, hashlib.blake2b)))
+                path_processed = path_processed[1:]
+            if path.startswith('\\'):
+                path_processed = path_processed[1:]
+            path_processed = path_processed.replace(os.sep, '/')
+            writer.writerow((path_processed, file_hash_hex(path, hashlib.blake2b)))
     print(f'Checksum was succesfully generated to {checksum_output_destination}')
