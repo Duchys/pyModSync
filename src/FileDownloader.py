@@ -1,6 +1,8 @@
 def file_downloader(file_url,file_destination_path):
     import requests
     import sys
+    import errno
+    import os
 #TODO: find an alternative which works with GUI aswell
     from tqdm import tqdm
 #TODO: Add configuration option which allows insecure downloads (incase self signed certs are user [or addon repository has expired certificate])
@@ -27,6 +29,13 @@ def file_downloader(file_url,file_destination_path):
         #create file download file in path file_destination_path and prepare to wirte to it
         #also sets up tqdm download progress bar
         filename=file_url.split('/')[-1]
+        #Create directory path if it does not exist
+        if not os.path.exists(os.path.dirname(file_destination_path)):
+            try:
+                os.makedirs(os.path.dirname(file_destination_path))
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
         with open(file_destination_path, 'wb') as downloaded_file, tqdm(
             #TQDM progress bar configuration
             desc=filename,
