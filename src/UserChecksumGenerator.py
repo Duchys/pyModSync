@@ -18,10 +18,12 @@
 #@AGM/modfilea.pbo checksum
 import sys
 #Based on this output addons @ACE, @TFAR, @AGM will be enabled.
+#TODO: generate the 
 def local_repository_generator(source_addon_directory, checksum_output_destination):
     import csv
     import hashlib
     import os
+    import shutil
 #TODO: Get someone who knows what he is doing, and not just doing CTRL + C from the web until it starts working...
 
     def file_hash_hex(file_path, hash_func):
@@ -32,7 +34,8 @@ def local_repository_generator(source_addon_directory, checksum_output_destinati
             for filename in files:
                 yield os.path.join(directory, filename)
 #TODO: add comments so it seems like i know what I'm doing
-    with open(checksum_output_destination, 'w', newline='',encoding='utf-8') as f:
+    checksum_output_temp_destination=checksum_output_destination+'_temp'
+    with open(checksum_output_temp_destination, 'w', newline='',encoding='utf-8') as f:
         print('this will take some time, go and grab a coffee')
         writer = csv.writer(f)
         writer = csv.writer(f, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
@@ -46,4 +49,6 @@ def local_repository_generator(source_addon_directory, checksum_output_destinati
             path_processed = path_processed.replace('\\', '/')
             print (f'Generating checksum for {path_processed}')
             writer.writerow((path_processed, file_hash_hex(path, hashlib.blake2b)))
+    shutil.move(checksum_output_temp_destination,checksum_output_destination)
     print(f'Checksum was succesfully generated to {checksum_output_destination}')
+    print('...........................................')
