@@ -6,6 +6,8 @@ import os
 #TODO: Allow user to specifiy the path
 #TODO: Check if forward slashes work on Windows aswell @Furi
 remote_repository_url = 'https://a3.417rct.org/addons/a_debilek_roku_vyhrava_duchy.csv'
+if remote_repository_url.endswith('/'):
+    remote_repository_url = remote_repository_url[:-1]
 remote_repository_destination_path = '/home/duchys/Documents/remoterepository.csv'
 print('...........................................')
 print ('Updating the remote repository')
@@ -37,4 +39,6 @@ print('Checking for differences between local and remote repository')
 #Compare repositories for any differences, and write them to an outfile
 compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile)
 #Check if outfile for repository difference contains any data
-check_for_update(local_repository, remote_repository_destination_path, repository_difference_outfile)
+if check_for_update(local_repository, remote_repository_destination_path, repository_difference_outfile):
+    #tady zavolej něco co ty data vytáhne
+    print('a')
