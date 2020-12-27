@@ -2,6 +2,7 @@ from FileDownloader import file_downloader
 from CheckForUpdate import compare_repositories
 from CheckForUpdate import check_for_update
 from UserChecksumGenerator import local_repository_generator
+from FileUpdateRequester import file_update_requester
 import os
 #TODO: Allow user to specifiy the path
 #TODO: Check if forward slashes work on Windows aswell @Furi
@@ -16,7 +17,11 @@ file_downloader(remote_repository_url, remote_repository_destination_path)
 
 #Compare changed files between local addon repostiory (eg. Franta Cihla's local mod folder [/mnt/addons]) and remote addon repository (eg. 417RCT Official Repository)
 local_repository= '/home/duchys/Documents/localrepo.csv'
+
 local_addon_path= '/mnt/ssd/417addons'
+#Delete extra / if present
+if local_addon_path.endswith('/'):
+    local_addon_path = local_addon_path[:-1]
 repository_difference_outfile= '/home/duchys/Documents/repodiffoutfile.csv'
 
 print('Checking if local repository already exists')
@@ -39,6 +44,8 @@ print('Checking for differences between local and remote repository')
 #Compare repositories for any differences, and write them to an outfile
 compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile)
 #Check if outfile for repository difference contains any data
-if check_for_update(local_repository, remote_repository_destination_path, repository_difference_outfile):
+while check_for_update(local_repository, remote_repository_destination_path, repository_difference_outfile):
     #tady zavolej něco co ty data vytáhne
-    print('a')
+    file_update_requester(remote_repository_url,repository_difference_outfile,local_addon_path)
+    local_repository_generator(local_addon_path, local_repository)
+    compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile)
