@@ -91,7 +91,7 @@ def config_loader():
         repository_difference_outfile = config['GENERAL']['repository_difference_outfile']
         remote_repository_destination_path = config['GENERAL']['remote_repository_destination_path']
         local_addon_path = config['GENERAL']['local_addon_path']
-        return remote_repository_url,local_repository,repository_difference_outfile,remote_repository_destination_path,local_addon_path
+        return [remote_repository_url,local_repository,repository_difference_outfile,remote_repository_destination_path,local_addon_path]
     else:
         print('Linux detected')
         #Sets variable to contain home directory of current user
