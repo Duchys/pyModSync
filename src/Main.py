@@ -42,7 +42,14 @@ print('Updating the remote repository')
 try:
     file_downloader(remote_repository_url, remote_repository_destination_path)
 except:
-    print('failed to download the repository, cached repository will be used...')
+    if os.path.isfile(remote_repository_destination_path):
+        print('Failed to download remote repository, cached repository will be used...')
+    else:
+        print('Failed to download remote repository, no cached version found...')
+        print('Exiting...')
+        exit
+
+
 #Compare changed files between local addon repostiory (eg. Franta Cihla's local mod folder [/mnt/addons]) and remote addon repository (eg. 417RCT Official Repository)
 
 #Delete extra / if present
