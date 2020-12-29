@@ -45,7 +45,6 @@ def local_repository_generator(source_addon_directory, checksum_output_destinati
         print('this will take some time, go and grab a coffee')
         writer = csv.writer(outlocalrepo, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for path in sorted_file_listing(source_addon_directory):
-            print(path)
             path_processed=path.replace(source_addon_directory,'')
             #Removes / from the path incase the path did not end with a /
             path_processed = path_processed.replace('\\', '/')
