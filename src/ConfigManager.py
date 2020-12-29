@@ -6,6 +6,7 @@ def create_config(local_addon_path,remote_repository_url):
     config = configparser.ConfigParser(allow_no_value=True)
     #If the OS is windows
     if os.name == 'nt':
+        print('Using configuration for Windows Systems')
         config['GENERAL'] = {}
         config['GENERAL']['#Variable used to specify the homepath of pyModSync'] = None
         config['GENERAL']['pymodsync_home_dir'] = 'C:/ProgramData/pyModSync'
@@ -24,9 +25,11 @@ def create_config(local_addon_path,remote_repository_url):
             os.makedirs('C:/ProgramData/pyModSync')
         with open('C:/ProgramData/pyModSync/pymodsync.properties', 'w') as configfile:
             config.write(configfile)
+        print('Config created')
 #Or if it is other OS, hopefully one that uses the .config and .cache directories :)
     else:
         #Sets the user home directory
+        print('Using configuration for Linux')
         user_home = os.path.expanduser("~")
         remote_repository_destination_path = user_home + '/.cache/pyModSync/remoterepository.csv'
         local_repository = user_home + '/.cache/pyModSync/localrepository.csv'
@@ -51,6 +54,7 @@ def create_config(local_addon_path,remote_repository_url):
 
         with open(user_home + '/.config/pyModSync/pymodsync.properties', 'w') as configfile:
             config.write(configfile)
+        print('Config created')
 
 def check_if_config_exists():
     if os.name == 'nt':
@@ -77,10 +81,12 @@ def check_if_config_exists():
 def config_loader():
     config = configparser.ConfigParser()
     if os.name == 'nt':
+        
         #Path to config file
-        config_location = 'C:/ProgramData/pyModSync'
+        config_location = 'C:/ProgramData/pyModSync/pymodsync.properties'
         #Reads the config file
         config.read(config_location)
+        print(f'Loading configuration from {config_location}')
         #Saves contents of config file to variables
         remote_repository_url = config['GENERAL']['remote_repository_url']
         local_repository = config['GENERAL']['local_repository']
@@ -89,6 +95,7 @@ def config_loader():
         local_addon_path = config['GENERAL']['local_addon_path']
         return remote_repository_url,local_repository,repository_difference_outfile,remote_repository_destination_path,local_addon_path
     else:
+        print('Linux detected')
         #Sets variable to contain home directory of current user
         user_home = os.path.expanduser("~")
         #Path to config file
