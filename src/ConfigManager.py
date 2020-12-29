@@ -8,18 +8,16 @@ def create_config(local_addon_path,remote_repository_url):
     if os.name == 'nt':
         print('Using configuration for Windows Systems')
         config['GENERAL'] = {}
-        config['GENERAL']['#Variable used to specify the homepath of pyModSync'] = None
-        config['GENERAL']['pymodsync_home_dir'] = 'C:/ProgramData/pyModSync'
         config['GENERAL']['#URL where the remote repository is available'] = None
         config['GENERAL']['remote_repository_url'] = remote_repository_url
         config['GENERAL']['#Location where the file containing the remote checksum repository should be downloaded to'] = None
-        config['GENERAL']['remote_repository_destination_path'] = '${pymodsync_home_dir}/remoterepository.csv'
+        config['GENERAL']['remote_repository_destination_path'] = 'C:/ProgramData/pyModSync/remoterepository.csv'
         config['GENERAL']['#Addon folder location'] = None
         config['GENERAL']['local_addon_path']= local_addon_path
         config['GENERAL']['#Location where the file with local checksum repository should be stored'] = None
-        config['GENERAL']['local_repository']= '${pymodsync_home_dir}/localrepo.csv'
+        config['GENERAL']['local_repository']= 'C:/ProgramData/pyModSync/localrepo.csv'
         config['GENERAL']['#This file is used only for update purposes'] = None
-        config['GENERAL']['repository_difference_outfile']= '${pymodsync_home_dir}/repodiffoutfile.csv'
+        config['GENERAL']['repository_difference_outfile']= 'C:/ProgramData/pyModSync/repodiffoutfile.csv'
 
         if not os.path.exists('C:/ProgramData/pyModSync'):
             os.makedirs('C:/ProgramData/pyModSync')
