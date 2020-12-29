@@ -49,13 +49,9 @@ def local_repository_generator(source_addon_directory, checksum_output_destinati
             path_processed=path.replace(source_addon_directory,'')
             #Removes / from the path incase the path did not end with a /
             path_processed = path_processed.replace('\\', '/')
-            if path.startswith('/'):
-                print('true')
-                print(path_processed)
+            if path_processed.startswith('/'):
                 path_processed = path_processed[1:]
-            if path.startswith('\\'):
-                print('true')
-                print(path_processed)
+            if path_processed.startswith('\\'):
                 path_processed = path_processed[1:]
             print (f'Generating checksum for {path_processed}')
             writer.writerow((path_processed, file_hash_hex(path, hashlib.blake2b)))
