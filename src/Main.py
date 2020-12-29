@@ -46,6 +46,5 @@ compare_repositories(local_repository, remote_repository_destination_path, repos
 #Check if outfile for repository difference contains any data
 while check_for_update(local_repository, remote_repository_destination_path, repository_difference_outfile):
     #tady zavolej něco co ty data vytáhne
-    file_update_requester(remote_repository_url,repository_difference_outfile,local_addon_path)
-    local_repository_generator(local_addon_path, local_repository)
+    file_update_requester(remote_repository_url,repository_difference_outfile,local_addon_path,local_repository)
     compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile)
