@@ -24,23 +24,19 @@ if not check_if_config_exists():
 
 print('loading the config...')
 config=config_loader()
-remote_repository_url=config[0]
-local_repository=config[1]
-repository_difference_outfile=config[2]
-remote_repository_destination_path=config[3]
-local_addon_path=config[4]
-print (remote_repository_url)
-print (local_repository)
-print (repository_difference_outfile)
-print (remote_repository_destination_path)
-print (local_addon_path)
+remote_repository_url = config[0]
+local_repository = config[1]
+repository_difference_outfile = config[2]
+remote_repository_destination_path = config[3]
+local_addon_path = config[4]
+
 
 #TODO: Allow user to specifiy the path
 #TODO: Check if forward slashes work on Windows aswell @Furi
 if remote_repository_url.endswith('/'):
     remote_repository_url = remote_repository_url[:-1]
 print('...........................................')
-print ('Updating the remote repository')
+print('Updating the remote repository')
 #Download repository
 #Try and except is used to prevent crash incase the remote repository is unavailable
 try:
