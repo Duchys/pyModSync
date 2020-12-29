@@ -41,6 +41,7 @@ print('...........................................')
 
 
 print('Checking for differences between local and remote repository')
+print('...........................................')
 #Compare repositories for any differences, and write them to an outfile
 compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile)
 #Check if outfile for repository difference contains any data
@@ -48,3 +49,5 @@ while check_for_update(local_repository, remote_repository_destination_path, rep
     #tady zavolej něco co ty data vytáhne
     file_update_requester(remote_repository_url,repository_difference_outfile,local_addon_path,local_repository)
     compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile)
+print('All files are now synchronized with the remote repository...')
+print('Exiting...')
