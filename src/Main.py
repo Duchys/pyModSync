@@ -3,10 +3,30 @@ from CheckForUpdate import compare_repositories
 from CheckForUpdate import check_for_update
 from UserChecksumGenerator import local_repository_generator
 from FileUpdateRequester import file_update_requester
+from ConfigManager import create_config
+from ConfigManager import check_if_config_exists
 import os
+import configparser
+
+#Create initial config which will be then read from
+if not check_if_config_exists():
+    print('Config file not found, generating new config file...')
+    local_addon_path = input('Please enter path to your local addon directory (ie. /opt/Arma3addons): ')
+    print(local_addon_path)
+    if local_addon_path.endswith('/'):
+        local_addon_path = local_addon_path[:-1]
+    remote_repository_url = input('Please enter URL of the remote repository (ie. https://franta-cihla.com/remoterepo.csv): ')
+    print(remote_repository_url)
+    create_config(local_addon_path, remote_repository_url)
+else:
+    print('load the config...')
+
+
+
+
 #TODO: Allow user to specifiy the path
 #TODO: Check if forward slashes work on Windows aswell @Furi
-remote_repository_url = 'https://a3.417rct.org/addons/a_debilek_roku_vyhravaz_duchy.csv'
+remote_repository_url = 'https://a3.417rct.org/addons/a_debilek_roku_vyhrava_duchy.csv'
 if remote_repository_url.endswith('/'):
     remote_repository_url = remote_repository_url[:-1]
 remote_repository_destination_path = '/home/duchys/Documents/remoterepository.csv'
