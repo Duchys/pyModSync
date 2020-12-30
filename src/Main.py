@@ -23,7 +23,7 @@ if not check_if_config_exists():
     create_config(local_addon_path, remote_repository_url)
 
 print('loading the config...')
-config=config_loader()
+config = config_loader()
 remote_repository_url = config[0]
 local_repository = config[1]
 repository_difference_outfile = config[2]
