@@ -30,9 +30,8 @@ def repository_generator(repository_name, path_to_modlist, source_addon_director
             return hash_func(f.read()).hexdigest()
     def sorted_file_listing(base_dir):
         for directory, subdirs, files in sorted(os.walk(base_dir)):
-                for filename in files:
-                    yield os.path.join(directory, filename)
-#TODO: add comments so it seems like i know what I'm doing
+            for filename in files:
+                yield os.path.join(directory, filename)
     #prepares list of mods used in the repository for use in the checksum generator
     modlist = []
     with open(path_to_modlist, 'r') as modlistcsv:
@@ -41,16 +40,16 @@ def repository_generator(repository_name, path_to_modlist, source_addon_director
 
     modlist_processed = [x[:-1] for x in modlist]
 
-    with open(checksum_output_destination, 'w', newline='',encoding='utf-8') as f:
+    with open(checksum_output_destination, 'w', newline='', encoding='utf-8') as checksum_outfile:
         print('this will take some time, go and grab a coffee')
-        writer = csv.writer(f)
+        writer = csv.writer(checksum_outfile)
         writer.writerow([repository_name])
         writer.writerow(["#DO NOT INSERT ANYTHING ABOVE THIS LINE"])
-        writer = csv.writer(f, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer = csv.writer(checksum_outfile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for path in sorted_file_listing(source_addon_directory):
             #Awful hack
             #Prepare string used for validation
-            path_processed=path.replace(source_addon_directory,'')
+            path_processed=path.replace(source_addon_directory, '')
             if path_processed.startswith('/'):
                 path_processed = path_processed[1:]
             if path.startswith('\\'):
@@ -59,7 +58,7 @@ def repository_generator(repository_name, path_to_modlist, source_addon_director
                 #If path modified for validation starts with any of strings provided by the modpack.ini file then craete a checksum for it and write it to repository.csv
             if path_processed.startswith(tuple(modlist_processed)):
                     #Removes / from the path incase the path did not end with a /
-                print (f'Generating checksum for {path_processed}')
+                print(f'Generating checksum for {path_processed}')
                 writer.writerow((path_processed, file_hash_hex(path, hashlib.blake2b)))
         print(f'Checksum was succesfully generated to {checksum_output_destination}')
 
