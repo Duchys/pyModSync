@@ -1,6 +1,3 @@
-
-
-#TODO: Add comments
 #Repository comparison
 def compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile):
         #Opens repo csv files

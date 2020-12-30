@@ -2,7 +2,7 @@ def update_checksum(updated_file,local_repository,updated_file_path):
     import csv
     import hashlib
     import shutil
-    from UserChecksumGenerator import file_hash_hex
+    from user_checksum_generator import file_hash_hex
     #Read local repository to memory
     with open(local_repository) as inlocalrepo:
         reader = csv.reader(inlocalrepo.readlines(), delimiter='\t')
@@ -29,7 +29,7 @@ def update_checksum(updated_file,local_repository,updated_file_path):
 
 
 def file_update_requester(remote_repository_url,repository_difference_outfile,local_addon_path,local_repository):
-    from FileDownloader import file_downloader
+    from file_downloader import file_downloader
     import csv
     #This file requests files found in repository_difference_outfile
     #Filter out filename of remote repository

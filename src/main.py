@@ -1,11 +1,11 @@
-from FileDownloader import file_downloader
-from CheckForUpdate import compare_repositories
-from CheckForUpdate import check_for_update
-from UserChecksumGenerator import local_repository_generator
-from FileUpdateRequester import file_update_requester
-from ConfigManager import create_config
-from ConfigManager import check_if_config_exists
-from ConfigManager import config_loader
+from file_downloader import file_downloader
+from check_for_update import compare_repositories
+from check_for_update import check_for_update
+from user_checksum_generator import local_repository_generator
+from file_update_requester import file_update_requester
+from config_manager import create_config
+from config_manager import check_if_config_exists
+from config_manager import config_loader
 import os
 import configparser
 
