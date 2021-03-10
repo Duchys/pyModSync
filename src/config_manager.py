@@ -10,15 +10,15 @@ def create_config(local_addon_path, remote_repository_url):
     if os.name == 'nt':
         print('Using configuration for Windows Systems')
         config['GENERAL'] = {}
-        config['GENERAL']['#URL where the remote repository is available'] = None
+        config['GENERAL']['# URL where the remote repository is available'] = None
         config['GENERAL']['remote_repository_url'] = remote_repository_url
-        config['GENERAL']['#Location where the file containing the remote checksum repository should be downloaded to'] = None  # noqa: E501 pylint: disable=line-too-long
+        config['GENERAL']['# Location where the file containing the remote checksum repository should be downloaded to'] = None  # noqa: E501 pylint: disable=line-too-long
         config['GENERAL']['remote_repository_destination_path'] = 'C:/ProgramData/pyModSync/remoterepository.csv'
-        config['GENERAL']['#Addon folder location'] = None
+        config['GENERAL']['# Addon folder location'] = None
         config['GENERAL']['local_addon_path'] = local_addon_path
-        config['GENERAL']['#Location where the file with local checksum repository should be stored'] = None
+        config['GENERAL']['# Location where the file with local checksum repository should be stored'] = None
         config['GENERAL']['local_repository'] = 'C:/ProgramData/pyModSync/localrepo.csv'
-        config['GENERAL']['#This file is used only for update purposes'] = None
+        config['GENERAL']['# This file is used only for update purposes'] = None
         config['GENERAL']['repository_difference_outfile'] = 'C:/ProgramData/pyModSync/repodiffoutfile.csv'
 
         if not os.path.exists('C:/ProgramData/pyModSync'):
@@ -35,15 +35,15 @@ def create_config(local_addon_path, remote_repository_url):
         local_repository = user_home + '/.cache/pyModSync/localrepository.csv'
         repository_difference_outfile = user_home + '/.cache/pyModSync/repositorydifference.csv'
         config['GENERAL'] = {}
-        config['GENERAL']['#URL where the remote repository is available'] = None
+        config['GENERAL']['# URL where the remote repository is available'] = None
         config['GENERAL']['remote_repository_url'] = remote_repository_url
-        config['GENERAL']['#Location where the file containing the remote checksum repository should be downloaded to'] = None  # noqa: E501 pylint: disable=line-too-long
+        config['GENERAL']['# Location where the file containing the remote checksum repository should be downloaded to'] = None  # noqa: E501 pylint: disable=line-too-long
         config['GENERAL']['remote_repository_destination_path'] = remote_repository_destination_path
-        config['GENERAL']['#Addon folder location'] = None
+        config['GENERAL']['# Addon folder location'] = None
         config['GENERAL']['local_addon_path'] = local_addon_path
-        config['GENERAL']['#Location where the file with local checksum repository should be stored'] = None
+        config['GENERAL']['# Location where the file with local checksum repository should be stored'] = None
         config['GENERAL']['local_repository'] = local_repository
-        config['GENERAL']['#This file is used only for update purposes'] = None
+        config['GENERAL']['# This file is used only for update purposes'] = None
         config['GENERAL']['repository_difference_outfile'] = repository_difference_outfile
         # Creates directories if they do not exist yet
         if not os.path.exists(user_home + '/.config/pyModSync'):
@@ -65,8 +65,12 @@ def check_if_config_exists():
         if os.path.isfile(config_location):
             print('Configuration file found, loading configuration...')
             return 1
-
         print('No configuration file found...')
+        local_addon_path = input('Please enter path to your local addon directory (ie. /opt/Arma3addons): ')
+        if local_addon_path.endswith('/'):
+            local_addon_path = local_addon_path[:-1]
+        remote_repository_url = input('Please enter URL of the remote repository (ie. https://franta.com/repo.csv): ')
+        create_config(local_addon_path, remote_repository_url)
         return 0
     else:
         user_home = os.path.expanduser("~")
