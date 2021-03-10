@@ -74,7 +74,12 @@ def check_if_config_exists():
         if os.path.isfile(config_location):
             print('Configuration file found, loading configuration...')
             return 1
-        print('No configuration file found...')
+        print('Config file not found, generating new config file...')
+        local_addon_path = input('Please enter path to your local addon directory (ie. /opt/Arma3addons): ')
+        if local_addon_path.endswith('/'):
+            local_addon_path = local_addon_path[:-1]
+        remote_repository_url = input('Please enter URL of the remote repository (ie. https://franta.com/repo.csv): ')
+        create_config(local_addon_path, remote_repository_url)
         return 0
 
 

@@ -23,25 +23,23 @@ import hashlib
 import os
 
 # Generate server repository containing addons based on the provided modlist and source addon directory
-repository_name = '%s' % (sys.argv[1])
-path_to_modlist = '%s' % (sys.argv[2])
-source_addon_directory = '%s/' % (sys.argv[3])
-checksum_output_destination = '%s' % (sys.argv[4])
 
 
-def file_hash_hex(file_path, hash_func):
-    """Fuction used for hashing
+def remote_repository_generator():
+    """Generate server repository
     """
-    with open(file_path, 'rb') as file:
-        return hash_func(file.read()).hexdigest()
+    def file_hash_hex(file_path, hash_func):
+        """Fuction used for hashing
+        """
+        with open(file_path, 'rb') as file:
+            return hash_func(file.read()).hexdigest()
 
-
-def sorted_file_listing(base_dir):
-    """Yeild paths in the provided base_dir
-    """
-    for directory, subdirs, files in sorted(os.walk(base_dir)):
-        for filename in files:
-            yield subdirs, os.path.join(directory, filename)
+    def sorted_file_listing(base_dir):
+        """Yeild paths in the provided base_dir
+        """
+        for directory, subdirs, files in sorted(os.walk(base_dir)):
+            for filename in files:
+                yield os.path.join(directory, filename)
     # prepares list of mods used in the repository for use in the checksum generator
     modlist = []
     with open(path_to_modlist, 'r') as modlistcsv:
@@ -71,3 +69,10 @@ def sorted_file_listing(base_dir):
                 print(f'Generating checksum for {path_processed}')
                 writer.writerow((path_processed, file_hash_hex(path, hashlib.blake2b)))
         print(f'Checksum was succesfully generated to {checksum_output_destination}')
+
+
+repository_name = '%s' % (sys.argv[1])
+path_to_modlist = '%s' % (sys.argv[2])
+source_addon_directory = '%s/' % (sys.argv[3])
+checksum_output_destination = '%s' % (sys.argv[4])
+remote_repository_generator()
