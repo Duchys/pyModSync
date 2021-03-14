@@ -1,3 +1,4 @@
+import os
 import subprocess
 from config_manager import config_loader
 
@@ -32,10 +33,12 @@ def game_launcher():
     # Adds full addon path to the modpath
     mod_list = [local_addon_path_processed + s for s in mod_list]
     # Starts the Arma 3 with optional addons
-    subprocess.run(f"steam steam://rungameid/107410//-mod={'%3B'.join(mod_list)}", shell=True, check=True)
-
-# Windows to be tested
-# subprocess.run("cmd /c start steam://rungameidm/107410")
+    # Check if it is Windows
+    if os.name == 'nt':
+        subprocess.run(f"cmd /c start steam://rungameid/107410//-mod={'%3B'.join(mod_list)}", check=True)
+    # Else hopefully it is linux
+    else:
+        subprocess.run(f"steam steam://rungameid/107410//-mod={'%3B'.join(mod_list)}", shell=True, check=True)
 
 
 game_launcher()
