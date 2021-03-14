@@ -33,7 +33,7 @@ def game_launcher():
     if os.name == 'nt':
         steam_exe_path = config[5]
         mod_list = [s.replace('/', '\\') for s in mod_list]
-        subprocess.call("%s -mod=%s", check=True % (str(steam_exe_path), str(';'.join(mod_list))))
+        subprocess.call(f"{steam_exe_path} -mod={mod_list}")
     else:
         proton_mnt_drive_letter = 'Z:'
         # Add proton mount drive letter to each string in list
