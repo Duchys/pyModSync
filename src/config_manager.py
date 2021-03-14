@@ -110,19 +110,19 @@ def config_loader():
         repository_difference_outfile = config['GENERAL']['repository_difference_outfile']
         remote_repository_destination_path = config['GENERAL']['remote_repository_destination_path']
         local_addon_path = config['GENERAL']['local_addon_path']
-        return [remote_repository_url, local_repository, repository_difference_outfile, remote_repository_destination_path, local_addon_path]  # noqa: E501 pylint: disable=line-too-long
-    else:
-        print('Linux detected')
-        # Sets variable to contain home directory of current user
-        user_home = os.path.expanduser("~")
-        # Path to config file
-        config_location = user_home + '/.config/pyModSync/pymodsync.properties'
-        # Reads the config file
-        config.read(config_location)
-        # Saves contents of config file to variables
-        remote_repository_url = config['GENERAL']['remote_repository_url']
-        local_repository = config['GENERAL']['local_repository']
-        repository_difference_outfile = config['GENERAL']['repository_difference_outfile']
-        remote_repository_destination_path = config['GENERAL']['remote_repository_destination_path']
-        local_addon_path = config['GENERAL']['local_addon_path']
-        return [remote_repository_url, local_repository, repository_difference_outfile, remote_repository_destination_path, local_addon_path]  # noqa: E501 pylint: disable=line-too-long
+        steam_exe_path = config['GENERAL']['steam_exe_path']
+        return [remote_repository_url, local_repository, repository_difference_outfile, remote_repository_destination_path, local_addon_path, steam_exe_path]  # noqa: E501 pylint: disable=line-too-long
+
+    # Sets variable to contain home directory of current user
+    user_home = os.path.expanduser("~")
+    # Path to config file
+    config_location = user_home + '/.config/pyModSync/pymodsync.properties'
+    # Reads the config file
+    config.read(config_location)
+    # Saves contents of config file to variables
+    remote_repository_url = config['GENERAL']['remote_repository_url']
+    local_repository = config['GENERAL']['local_repository']
+    repository_difference_outfile = config['GENERAL']['repository_difference_outfile']
+    remote_repository_destination_path = config['GENERAL']['remote_repository_destination_path']
+    local_addon_path = config['GENERAL']['local_addon_path']
+    return [remote_repository_url, local_repository, repository_difference_outfile, remote_repository_destination_path, local_addon_path]  # noqa: E501 pylint: disable=line-too-long
