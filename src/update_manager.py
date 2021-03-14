@@ -1,7 +1,6 @@
 import os
 import csv
 import hashlib
-import shutil
 from local_repository_manager import file_hash_hex
 from file_downloader import file_downloader
 
@@ -58,7 +57,7 @@ def update_checksum(updated_file, local_repository, updated_file_path):
         # Generate hash for the updated file on the end of the line
         writer.writerow((updated_file, file_hash_hex(updated_file_path, hashlib.blake2b)))
     # Move the temporary repository to the local_repository path
-    shutil.move(local_repository_temp_destination, local_repository)
+    os.replace(local_repository_temp_destination, local_repository)
     print(f'Checksum for {updated_file} was generated and saved to the local repository...')
     print('...........................................')
 
