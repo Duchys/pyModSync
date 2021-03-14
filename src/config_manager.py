@@ -8,6 +8,9 @@ def create_config(local_addon_path, remote_repository_url):
     config = configparser.ConfigParser(allow_no_value=True)
     # If the OS is windows
     if os.name == 'nt':
+        import winreg
+        steam_exe_path = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\\Valve\\Steam\\InstallPath", 0, winreg.KEY_READ)  # noqa: E501 pylint: disable=line-too-long
+        steam_exe_path = winreg.QueryValueEx(steam_exe_path)
         print('Using configuration for Windows Systems')
         config['GENERAL'] = {}
         config['GENERAL']['# URL where the remote repository is available'] = None
@@ -20,6 +23,8 @@ def create_config(local_addon_path, remote_repository_url):
         config['GENERAL']['local_repository'] = 'C:/ProgramData/pyModSync/localrepo.csv'
         config['GENERAL']['# This file is used only for update purposes'] = None
         config['GENERAL']['repository_difference_outfile'] = 'C:/ProgramData/pyModSync/repodiffoutfile.csv'
+        config['GENERAL']['# Path to steam.exe file'] = None
+        config['GENERAL']['steam_exe_path'] = steam_exe_path
 
         if not os.path.exists('C:/ProgramData/pyModSync'):
             os.makedirs('C:/ProgramData/pyModSync')
