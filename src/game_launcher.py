@@ -31,9 +31,9 @@ def game_launcher():
     # Starts the Arma 3 with optional addons
     # Check if it is Windows
     if os.name == 'nt':
-        steam_exe_path = config[6]
+        steam_exe_path = config[5]
         mod_list = [s.replace('/', '\\') for s in mod_list]
-        subprocess.call(f" {steam_exe_path} -mod={';'.join(mod_list)}", check=True)
+        subprocess.call("%s -mod=%s", check=True % (steam_exe_path, ';'.join(mod_list)))
     else:
         proton_mnt_drive_letter = 'Z:'
         # Add proton mount drive letter to each string in list
