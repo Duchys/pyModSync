@@ -24,21 +24,27 @@ def game_launcher():
             mod_list.append(mod)
     # Remove duplicite lines
     mod_list = list(set(mod_list))
-    # URL parsing
-    mod_list = [x.replace('@', '%40') for x in mod_list]
     # Add backslash to addon path
     local_addon_path_processed = local_addon_path + '/'
-    # URL parsing
-    local_addon_path_processed = local_addon_path_processed.replace("/", "%2F")
     # Adds full addon path to the modpath
     mod_list = [local_addon_path_processed + s for s in mod_list]
     # Starts the Arma 3 with optional addons
     # Check if it is Windows
     if os.name == 'nt':
-        subprocess.run(f"cmd /c start steam://rungameid/107410//-mod={'%3B'.join(mod_list)}", check=True)
-    # Else hopefully it is linux
+        steam_exe_path = config[6]
+        mod_list = [s.replace('/', '\\') for s in mod_list]
+        subprocess.call(f" {steam_exe_path} -mod={';'.join(mod_list)}", check=True)
     else:
-        subprocess.run(f"steam steam://rungameid/107410//-mod={'%3B'.join(mod_list)}", shell=True, check=True)
+        proton_mnt_drive_letter = 'Z:'
+        # Add proton mount drive letter to each string in list
+        mod_list = [proton_mnt_drive_letter + s for s in mod_list]
+        # Replace / with \\ for correct addon loading
+        mod_list = [s.replace('/', '\\') for s in mod_list]
+        print(mod_list)
+
+        subprocess.run(f"steam -applaunch 107410 mangohud %command% -nolauncher -cpuCount=16 PULSE_LATENCY_MSEC=90 gamemoderun -enableHT -exThreads=7 -name=Duchy -noPause -noSplash -skipIntro -world=empty -mod={';'.join(mod_list)}", shell=True, check=True)
+        # print(f'steam -applaunch 107410 mangohud %command% -nolauncher -cpuCount=16 PULSE_LATENCY_MSEC=90 gamemoderun -enableHT -exThreads=7 -name=Duchy -noPause -noSplash -skipIntro -world=empty -mod={';'.join(mod_list)}')
 
 
 game_launcher()
+#/home/duchys/.local/share/Steam/ubuntu12_32/steam -applaunch 107410 -nolauncher -cpuCount=16 PULSE_LATENCY_MSEC=90 gamemoderun -enableHT -exThreads=7 -name=Duchy -noPause -noSplash -skipIntro -world=empty
