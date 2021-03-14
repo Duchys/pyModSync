@@ -9,8 +9,10 @@ def create_config(local_addon_path, remote_repository_url):
     # If the OS is windows
     if os.name == 'nt':
         import winreg
-        steam_exe_path = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\\Valve\\Steam\\InstallPath", 0, winreg.KEY_READ)  # noqa: E501 pylint: disable=line-too-long
-        steam_exe_path = winreg.QueryValueEx(steam_exe_path)
+        steam_reg_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE,"SOFTWARE\\WOW6432Node\\Valve\\Steam")
+        steam_exe_path = winreg.QueryValueEx(steam_reg_key, "InstallPath")
+        print(steam_exe_path)
+        print(steam_reg_key)
         print('Using configuration for Windows Systems')
         config['GENERAL'] = {}
         config['GENERAL']['# URL where the remote repository is available'] = None
@@ -71,7 +73,7 @@ def check_if_config_exists():
             print('Configuration file found, loading configuration...')
             return 1
         print('No configuration file found...')
-        local_addon_path = input('Please enter path to your local addon directory (ie. /opt/Arma3addons): ')
+        local_addon_path = input('Please enter path to your local addon directory (ie. C:\\417addons): ')
         if local_addon_path.endswith('/'):
             local_addon_path = local_addon_path[:-1]
         remote_repository_url = input('Please enter URL of the remote repository (ie. https://franta.com/repo.csv): ')
