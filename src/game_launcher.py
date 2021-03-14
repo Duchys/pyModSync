@@ -33,18 +33,15 @@ def game_launcher():
     if os.name == 'nt':
         steam_exe_path = config[5]
         mod_list = [s.replace('/', '\\') for s in mod_list]
-        subprocess.call(f"{steam_exe_path} -mod={mod_list}")
+        subprocess.call(f"{steam_exe_path} -applaunch 107410 -nolauncher -mod='{';'.join(mod_list)}'", check=True)
     else:
         proton_mnt_drive_letter = 'Z:'
         # Add proton mount drive letter to each string in list
         mod_list = [proton_mnt_drive_letter + s for s in mod_list]
         # Replace / with \\ for correct addon loading
-        mod_list = [s.replace('/', '\\') for s in mod_list]
         print(mod_list)
 
-        subprocess.run(f"steam -applaunch 107410 mangohud %command% -nolauncher -cpuCount=16 PULSE_LATENCY_MSEC=90 gamemoderun -enableHT -exThreads=7 -name=Duchy -noPause -noSplash -skipIntro -world=empty -mod={';'.join(mod_list)}", shell=True, check=True)
-        # print(f'steam -applaunch 107410 mangohud %command% -nolauncher -cpuCount=16 PULSE_LATENCY_MSEC=90 gamemoderun -enableHT -exThreads=7 -name=Duchy -noPause -noSplash -skipIntro -world=empty -mod={';'.join(mod_list)}')
+        subprocess.run(f"steam -applaunch 107410 mangohud %command% -nolauncher -cpuCount=16 PULSE_LATENCY_MSEC=90 gamemoderun -enableHT -exThreads=7 -name=Duchy -noPause -noSplash -skipIntro -world=empty -mod='{';'.join(mod_list)}'", shell=True, check=True)
 
 
 game_launcher()
-#/home/duchys/.local/share/Steam/ubuntu12_32/steam -applaunch 107410 -nolauncher -cpuCount=16 PULSE_LATENCY_MSEC=90 gamemoderun -enableHT -exThreads=7 -name=Duchy -noPause -noSplash -skipIntro -world=empty
