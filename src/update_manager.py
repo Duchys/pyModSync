@@ -10,13 +10,13 @@ def compare_repositories(local_repository, remote_repository_destination_path, r
     """Compare local and remote repositori
     """
     # Opens repo csv files
-    with open(local_repository, 'r') as local_repo:
+    with open(local_repository, 'r', encoding="utf8") as local_repo:
         local_repo = local_repo.readlines()
-    with open(remote_repository_destination_path, 'r') as remote_repo:
+    with open(remote_repository_destination_path, 'r', encoding="utf8") as remote_repo:
         # Skips first 2 lines
         remote_repo = remote_repo.readlines()[2:]
     # Compares local repository with remote repostitory
-    with open(repository_difference_outfile, 'w') as repo_diff:
+    with open(repository_difference_outfile, 'w', encoding="utf8") as repo_diff:
         # Each line present in remote repostiory gets compared to the local_repository.
         # If the line is not present (ie. not exact match) it gets put to a repo_diff .csv file.
         for line in remote_repo:
@@ -40,7 +40,7 @@ def update_checksum(updated_file, local_repository, updated_file_path):
     """Update checksum of the updated file in the local repository
     """
     # Read local repository to memory
-    with open(local_repository) as inlocalrepo:
+    with open(local_repository, encoding="utf8") as inlocalrepo:
         reader = csv.reader(inlocalrepo.readlines(), delimiter='\t')
 
     local_repository_temp_destination = local_repository+'_temp'
