@@ -135,7 +135,7 @@ def create_config(local_addon_path, remote_repository_url):
                         # Ask user for path to arma3.exe
                         arma_exe_path = input('Please enter path to your arma3.exe (ie. C:\\Arma3\\arma3.exe)')
                         log.info('User responded %s', arma_exe_path)
-                        steam_exe_path = None
+                        steam_exe_path = ''
                         while arma_exe_path == '':
                             log.warning('No entry provided, asking the user for path to arma3.exe again')
                             print('No path provided, please provide a path.')
