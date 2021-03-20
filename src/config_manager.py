@@ -62,7 +62,7 @@ def create_config(local_addon_path, remote_repository_url):
             import winreg  # pylint: disable=import-error,import-outside-toplevel
             # Registry keys for steam install location
             steam_reg_location_32bit = "SOFTWARE\\Valve\\Steam"
-            steam_reg_location_64bit = "SOFTWARE\\WOW6432Node\\Valve\\Steam"
+            steam_reg_location_64bit = "SOFTWARE\\WOW6432Node\\Valve\\Steam1"
             try:
                 log.info('Opening 64-bit Steam registry key')
                 print('Opening 64-bit Steam registry key')
@@ -98,13 +98,15 @@ def create_config(local_addon_path, remote_repository_url):
                     log.info('Path to steam not found in registry')
                     log.info('Asking user if steam is installed')
                     # Ask user if steam is installed and transform it to lowercase
-                    steam_installed = str(input('Is steam installed? [YES/no]').lower or 'yes')
+                    steam_installed = input('Is steam installed? [YES/no]') or 'yes'
+                    steam_installed = steam_installed.lower()
                     # Check if users response is valid
                     while steam_installed not in ('yes', 'y', 'no', 'n'):
                         # if not, ask again
                         log.warning('Invalid entry provided, asking the user if steam is installed again')
                         print('Invalid entry, valid entries are YES, NO, N, Y')
-                        steam_installed = str(input('Is steam installed? [YES/no]').lower or 'yes')
+                        steam_installed = input('Is steam installed? [YES/no]') or 'yes'
+                        steam_installed = steam_installed.lower()
                     log.debug('User responded %s', steam_installed)
                     if steam_installed in ('yes', 'y'):
                         # If user responded that steam is installed, ask him for path to steam
@@ -115,13 +117,15 @@ def create_config(local_addon_path, remote_repository_url):
                             log.warning('Invalid entry provided, asking the user for path to steam.exe again')
                             print('Invalid path provided, please provide correct path.')
                             # Ask user if steam is really installed
-                            steam_installed = str(input('Is steam really installed? [YES/no]').lower or 'yes')
+                            steam_installed = input('Is steam really installed? [YES/no]') or 'yes'
+                            steam_installed = steam_installed.lower()
                             # Check validity of answer
                             while steam_installed not in ('yes', 'y', 'no', 'n'):
                                 # if not, ask again
                                 log.warning('Invalid entry provided, asking the user if steam is installed again')
                                 print('Invalid entry, valid entries are YES, NO, N, Y')
-                                steam_installed = str(input('Is steam really installed? [YES/no]').lower or 'yes')
+                                steam_installed = ('Is steam really installed? [YES/no]') or 'yes'
+                                steam_installed = steam_installed.lower()
                             if steam_installed in ('yes', 'y'):
                                 # Ask user for path to steam.exe
                                 steam_exe_path = input('Please enter path to the steam.exe (ie. C:\\Steam\\steam.exe)')
