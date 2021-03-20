@@ -124,7 +124,7 @@ def create_config(local_addon_path, remote_repository_url):
                                 # if not, ask again
                                 log.warning('Invalid entry provided, asking the user if steam is installed again')
                                 print('Invalid entry, valid entries are YES, NO, N, Y')
-                                steam_installed = ('Is steam really installed? [YES/no]') or 'yes'
+                                steam_installed = input('Is steam really installed? [YES/no]') or 'yes'
                                 steam_installed = steam_installed.lower()
                             if steam_installed in ('yes', 'y'):
                                 # Ask user for path to steam.exe
