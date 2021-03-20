@@ -1,5 +1,6 @@
 import os
 import subprocess
+import traceback
 from config_manager import config_loader
 from config_manager import check_if_config_exists
 
@@ -35,16 +36,32 @@ def game_launcher():
     if os.name == 'nt':
         steam_exe_path = config[5]
         mod_list = [s.replace('/', '\\') for s in mod_list]
-        subprocess.call(f"'{steam_exe_path}' -applaunch 107410 -nolauncher -mod='{';'.join(mod_list)}'", shell=True)
+        launch_command = (f"'{steam_exe_path}' -applaunch 107410 -nolauncher -mod='{';'.join(mod_list)}'")
+        try:
+            subprocess.run(launch_command, shell=True, check=True)
+        except subprocess.CalledProcessError:
+            print('Launching of Arma 3 failed')
+            print('Failed command:')
+            print(launch_command)
+            trace_back = traceback.format_exc()
+            print(trace_back)
+            exit(1)
     else:
         proton_mnt_drive_letter = 'Z:'
         # Add proton mount drive letter to each string in list
         mod_list = [proton_mnt_drive_letter + s for s in mod_list]
         # Replace / with \\ for correct addon loading
         mod_list = [s.replace('/', '\\') for s in mod_list]
-        print(mod_list)
-
-        subprocess.run(f"steam -applaunch 107410 mangohud %command% -nolauncher -cpuCount=16 PULSE_LATENCY_MSEC=90 gamemoderun -enableHT -exThreads=7 -name=Duchy -noPause -noSplash -skipIntro -world=empty -mod='{';'.join(mod_list)}'", shell=True, check=True)
+        launch_command = (f"steam -applaunch 107410 -mod='{';'.join(mod_list)}'")
+        try:
+            subprocess.run(launch_command, shell=True, check=True)
+        except subprocess.CalledProcessError:
+            print('Launching of Arma 3 failed')
+            print('Failed command:')
+            print(launch_command)
+            trace_back = traceback.format_exc()
+            print(trace_back)
+            exit(1)
 
 
 game_launcher()
