@@ -6,6 +6,8 @@ import traceback
 from logging.handlers import RotatingFileHandler
 import requests
 
+#TODO: Replace steam path \\ to /
+
 # Setup logging
 # Log level (options: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET)
 LOG_LEVEL = 'DEBUG'
@@ -71,7 +73,7 @@ def create_config(local_addon_path, remote_repository_url):
                 # Add steam.exe to the install path fo steam
                 steam_exe_path = str(steam_exe_path[0]) + "\\steam.exe"
             # Toss a exception if path is not found
-            except winreg.RegistryKeyNotFoundException:
+            except (winreg.RegistryKeyNotFoundException, FileNotFoundError):
                 print('No 64bit Steam registry key found.')
                 log.info('No 64bit Steam registry key found.')
                 try:
