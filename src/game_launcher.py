@@ -36,7 +36,7 @@ def game_launcher():
     if os.name == 'nt':
         steam_exe_path = config[5]
         mod_list = [s.replace('/', '\\') for s in mod_list]
-        launch_command = (f"'{steam_exe_path}' -applaunch 107410 -nolauncher -mod='{';'.join(mod_list)}'")
+        launch_command = (f"\"{steam_exe_path}\" -applaunch 107410 -nolauncher -mod='{';'.join(mod_list)}'")
         try:
             subprocess.run(launch_command, shell=True, check=True)
         except subprocess.CalledProcessError:
