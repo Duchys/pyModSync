@@ -1,12 +1,14 @@
 import os
 import subprocess
 from config_manager import config_loader
+from config_manager import check_if_config_exists
 
 
 def game_launcher():
     """Launch arma with mods as an optional parameter
     """
     # Load configuration
+    check_if_config_exists()
     config = config_loader()
     remote_repository = config[3]
     local_addon_path = config[4]
