@@ -52,13 +52,14 @@ def game_launcher():
         mod_list = [proton_mnt_drive_letter + s for s in mod_list]
         # Replace / with \\ for correct addon loading
         mod_list = [s.replace('/', '\\') for s in mod_list]
+        # Prepare launch command
         launch_command = (f"steam -applaunch 107410 -mod='{';'.join(mod_list)}'")
+        # Attempt to launch Arma
         try:
             subprocess.run(launch_command, shell=True, check=True)
+        # In case it print traceback and exit
         except subprocess.CalledProcessError:
-            print('Launching of Arma 3 failed')
-            print('Failed command:')
-            print(launch_command)
+            print('ERROR Launching of Arma 3 failed')
             trace_back = traceback.format_exc()
             print(trace_back)
             exit(1)
