@@ -52,6 +52,9 @@ def create_config(local_addon_path, remote_repository_url):
         log.debug('Windows system detected.')
         log.info('Creating configuration for Windows Systems')
         log.info('Reading registry for steam path')
+
+        arma_exe_path = ''
+        steam_exe_path = ''
         try:
             # Winreg is imported in here instead of top level, as it would otherwise crash the program on Linux Systems
             import winreg  # pylint: disable=import-error,import-outside-toplevel
@@ -266,7 +269,7 @@ def check_if_config_exists():
         local_addon_path = input('Please enter path to your local addon directory (ie. C:\\417addons): ')
         log.info('User submitted %s', local_addon_path)
         # Check if path was provided
-        while local_addon_path is None:
+        while local_addon_path == '':
             print('No addon path provided')
             log.warning('No addon path was provided, asking user again')
             local_addon_path = input('Please enter path to your local addon directory (ie. C:\\417addons): ')
