@@ -62,7 +62,7 @@ def create_config(local_addon_path, remote_repository_url):
             import winreg  # pylint: disable=import-error,import-outside-toplevel
             # Registry keys for steam install location
             steam_reg_location_32bit = "SOFTWARE\\Valve\\Steam"
-            steam_reg_location_64bit = "SOFTWARE\\WOW6432Node\\Valve\\Steam1"
+            steam_reg_location_64bit = "SOFTWARE\\WOW6432Node\\Valve\\Steam"
             try:
                 log.info('Opening 64-bit Steam registry key')
                 print('Opening 64-bit Steam registry key')
@@ -72,7 +72,13 @@ def create_config(local_addon_path, remote_repository_url):
                 steam_exe_path = winreg.QueryValueEx(steam_reg_key, "InstallPath")
                 # Add steam.exe to the install path fo steam
                 steam_exe_path = str(steam_exe_path[0]) + "\\steam.exe"
-            # Toss a exception if path is not found
+                # Toss a exception if path is not found
+                log.info('Checking if steam.exe path value from registry is valid')
+                if os.path.isfile(steam_exe_path):
+                    log.info('Steam path from registry is valid')
+                else:
+                    log.warning('Steam path from registry is invalid')
+                    raise FileNotFoundError(f'{steam_exe_path} not found')
             except (OSError, FileNotFoundError, EnvironmentError) as err:
                 log.debug(err)
                 print('No 64bit Steam registry key found.')
@@ -86,6 +92,7 @@ def create_config(local_addon_path, remote_repository_url):
                     steam_exe_path = winreg.QueryValueEx(steam_reg_key, "InstallPath")
                     # Add steam.exe to the install path fo steam
                     steam_exe_path = str(steam_exe_path[0]) + "\\steam.exe"
+                    # Toss a exception if path is not found
                     log.info('Checking if steam.exe path value from registry is valid')
                     if os.path.isfile(steam_exe_path):
                         log.info('Steam path from registry is valid')
@@ -154,9 +161,12 @@ def create_config(local_addon_path, remote_repository_url):
             log.error(trace_back)
             print(trace_back)
 
+        local_addon_path = local_addon_path.replace('\\', '/')
         remote_repository_destination_path = 'C:/ProgramData/pyModSync/remoterepository.csv'
         local_repository = 'C:/ProgramData/pyModSync/localrepo.csv'
         repository_difference_outfile = 'C:/ProgramData/pyModSync/repodiffoutfile.csv'
+        steam_exe_path = steam_exe_path.replace('\\', '/')
+        arma_exe_path = arma_exe_path.replace('\\', '/')
 
         log.info('Setting remote repostiory path to %s', remote_repository_destination_path)
         log.info('Setting local repostiory path to %s', local_repository)
