@@ -1,6 +1,7 @@
 # GOAL: Generate initial checksum of the addons
 # Take this function
-# Point it modpack folder and provide .ini file which contains mods you want to be included in the repository
+# Point it modpack folder and provide .ini file
+# which contains mods you want to be included in the repository
 # provide the following output
 # following will be generated /modpack/mod
 # example:
@@ -22,7 +23,8 @@ import csv
 import hashlib
 import os
 
-# Generate server repository containing addons based on the provided modlist and source addon directory
+# Generate server repository containing addons
+# based on the provided modlist and source addon directory
 
 
 def remote_repository_generator():
@@ -53,7 +55,8 @@ def remote_repository_generator():
         writer = csv.writer(checksum_outfile)
         writer.writerow([repository_name])
         writer.writerow(["#DO NOT INSERT ANYTHING ABOVE THIS LINE"])
-        writer = csv.writer(checksum_outfile, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer = csv.writer(checksum_outfile, delimiter='\t',
+                            quotechar='"', quoting=csv.QUOTE_MINIMAL)
         for path in sorted_file_listing(source_addon_directory):
             # Prepare string used for validation
             path_processed = path.replace(source_addon_directory, '')
@@ -62,7 +65,8 @@ def remote_repository_generator():
             if path.startswith('\\'):
                 path_processed = path_processed[1:]
             path_processed = path_processed.replace('\\', '/')
-            # If path modified for validation starts with any of strings provided by the modpack.ini file
+            # If path modified for validation starts with any of strings
+            # provided by the modpack.ini file
             # then craete a checksum for it and write it to repository.csv
             if path_processed.startswith(tuple(modlist_processed)):
                 # Removes / from the path incase the path did not end with a /
