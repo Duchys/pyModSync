@@ -1,6 +1,7 @@
 import os
 import subprocess
 import traceback
+import sys
 from config_manager import config_loader
 from config_manager import check_if_config_exists
 
@@ -45,7 +46,7 @@ def game_launcher():
             print(launch_command)
             trace_back = traceback.format_exc()
             print(trace_back)
-            exit(1)
+            sys.exit()
     else:
         proton_mnt_drive_letter = 'Z:'
         # Add proton mount drive letter to each string in list
@@ -62,7 +63,7 @@ def game_launcher():
             print('ERROR Launching of Arma 3 failed')
             trace_back = traceback.format_exc()
             print(trace_back)
-            exit(1)
+            sys.exit()
 
 
 game_launcher()
