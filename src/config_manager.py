@@ -6,7 +6,6 @@ import traceback
 from logging.handlers import RotatingFileHandler
 import requests
 
-# TODO: Replace steam path \\ to /
 
 # Setup logging
 # Log level (options: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET)
@@ -339,8 +338,10 @@ def check_if_config_exists():
             repo_status = False
             while repo_status is False:
                 try:
-                    repo_check_status_code = requests.head(remote_repository_url).status_code
-                except (requests.exceptions.ConnectionError, requests.exceptions.RequestException):
+                    repo_check_status_code = requests.head(remote_repository_url, timeout=15).status_code
+                except (requests.exceptions.ConnectionError,
+                        requests.exceptions.RequestException,
+                        requests.exceptions.Timeout):
                     # Set to status code if site is not reachable 451
                     repo_check_status_code = 451
                 if repo_check_status_code != 200:
@@ -363,7 +364,9 @@ def check_if_config_exists():
                 else:
                     log.info('%s returned status code 200, continuing')
                     repo_status = True
-        except (requests.exceptions.ConnectionError, requests.exceptions.RequestException) as err:
+        except (requests.exceptions.ConnectionError,
+                requests.exceptions.RequestException,
+                requests.exceptions.Timeout) as err:
             print(f"URL {remote_repository_url} not reachable")
             log.error(err)
             sys.exit()
@@ -440,8 +443,11 @@ def check_if_config_exists():
         repo_status = False
         while repo_status is False:
             try:
-                repo_check_status_code = requests.head(remote_repository_url).status_code
-            except (requests.exceptions.ConnectionError, requests.exceptions.RequestException):
+                repo_check_status_code = requests.head(remote_repository_url,  timeout=15).status_code
+            except (requests.exceptions.ConnectionError,
+                    requests.exceptions.RequestException,
+                    requests.exceptions.Timeout) as err:
+                log.warning(err)
                 # Set to status code if site is not reachable 451
                 repo_check_status_code = 451
             if repo_check_status_code != 200:
@@ -529,8 +535,6 @@ def config_loader():
     log.info('Loaded local repository path: %s', local_repository)
     log.info('Loaded repository difference outfile path: %s', repository_difference_outfile)
     log.info('Loaded remote repository destination path: %s', remote_repository_destination_path)
-    log.info('Loaded steam.exe path: %s', steam_exe_path)
-    log.info('Loaded arma3.exe path: %s', arma_exe_path)
     log.info('Loaded log level: %s', log_level)
     log.info('Loaded log file path: %s', log_file_path)
 
