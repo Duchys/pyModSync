@@ -443,7 +443,7 @@ def check_if_config_exists():
         repo_status = False
         while repo_status is False:
             try:
-                repo_check_status_code = requests.head(remote_repository_url,  timeout=15).status_code
+                repo_check_status_code = requests.head(remote_repository_url, timeout=15).status_code
             except (requests.exceptions.ConnectionError,
                     requests.exceptions.RequestException,
                     requests.exceptions.Timeout) as err:
