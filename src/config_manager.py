@@ -100,7 +100,7 @@ def game_path_requester():
         log.info('Opening 64-bit Steam registry key')
         print('Opening 64-bit Steam registry key')
         # Open 64-bit steam registry key
-        steam_reg_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, steam_reg_location_64bit)
+        steam_reg_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, steam_reg_location)
         # Read values from InstallPath
         steam_exe_path = winreg.QueryValueEx(steam_reg_key, "InstallPath")
         # Add steam.exe to the install path fo steam
