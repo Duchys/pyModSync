@@ -9,7 +9,6 @@ def file_downloader(file_url, file_destination_path):
     """When this fuction is called, file_url is downloaded and stored in file_destination_path
     """
     file_stream = requests.get(file_url, stream=True)
-    #    print(file_stream.status_code)
     # Sets the path to which the file should be put
     # Write the file to prespecified path by user
 
