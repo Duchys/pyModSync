@@ -110,9 +110,8 @@ def game_path_requester():
         if os.path.isfile(steam_exe_path):
             log.info('Steam path from registry is valid')
             return steam_exe_path
-        else:
-            log.warning('Steam path from registry is invalid')
-            raise FileNotFoundError(f'{steam_exe_path} not found') from FileNotFoundError
+        log.warning('Steam path from registry is invalid')
+        raise FileNotFoundError(f'{steam_exe_path} not found') from FileNotFoundError
 
     def ask_if_steam_is_installed():
         """Ask user if steam is installed.
@@ -214,9 +213,8 @@ def game_path_requester():
                 steam_exe_path = steam_path_requester()
                 if steam_exe_path != '':
                     return [steam_exe_path, arma_exe_path]
-                else:
-                    arma_exe_path = arma_path_requester()
-                    return [steam_exe_path, arma_exe_path]
+                arma_exe_path = arma_path_requester()
+                return [steam_exe_path, arma_exe_path]
     # Raise exception if all else fails
     except (OSError, EnvironmentError):
         print('Unhandled exception located, report steps taken to application author')
