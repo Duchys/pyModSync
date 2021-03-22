@@ -123,20 +123,74 @@ def game_path_requester():
         return steam_installed
 
     def steam_path_requester():
-        """Ask user to the steam.exe
+        """Ask user for steam path and validate it.
         """
-        steam_exe_path = input('Please enter path to the steam.exe (ie. C:\\Steam\\steam.exe)')
-        log.info('User responded %s', steam_exe_path)
+        def ask_for_steam_path():
+            """Ask user for steam path
+            """
+            steam_exe_path = input('Please enter path to the steam.exe (ie. C:\\Steam\\steam.exe)')
+            log.info('User responded %s', steam_exe_path)
+            return steam_exe_path
+
+        print('Path to steam not found in registry')
+        log.info('Path to steam not found in registry')
+        log.info('Asking user if steam is installed')
+        # Ask user if steam is installed
+        steam_installed = ask_if_steam_is_installed()
+        # Check if users response is valid
+        while steam_installed not in ('yes', 'y', 'no', 'n'):
+            # if not, ask again
+            log.warning('Invalid entry provided, asking the user if steam is installed again')
+            print('Invalid entry, valid entries are YES, NO, N, Y')
+            steam_installed = ask_if_steam_is_installed()
+        while steam_installed in ('yes', 'y'):
+            # If user responded that steam is installed, ask him for path to steam
+            log.info('Asking user for path to steam.exe')
+            steam_exe_path = ask_for_steam_path()
+            # Check if provided path ends in file and if steam is installed
+            while not os.path.isfile(steam_exe_path) and steam_installed in ('yes', 'y'):
+                log.warning('Invalid entry provided, asking the user for path to steam.exe again')
+                print('Invalid path provided.')
+                # Ask user if steam is really installed
+                steam_installed = ask_if_steam_is_installed()
+                # Check validity of answer
+                while steam_installed not in ('yes', 'y', 'no', 'n'):
+                    # if not, ask again
+                    log.warning('Invalid entry provided, asking the user if steam is installed again')
+                    print('Invalid entry, valid entries are YES, NO, N, Y')
+                    steam_installed = ask_if_steam_is_installed()
+                if steam_installed in ('yes', 'y'):
+                    # Ask user for path to steam.exe
+                    steam_exe_path = ask_for_steam_path()
+            if steam_installed in ('yes', 'y'):
+                return steam_exe_path
+        steam_exe_path = ''
         return steam_exe_path
 
     def arma_path_requester():
-        """Ask user for path to arma3.exe
+        """Ask user for path to arma3.exe and validate it
         """
-        arma_exe_path = input('Please enter path to your arma3.exe (ie. C:\\Arma3\\arma3.exe)')
-        log.info('User responded %s', arma_exe_path)
+        def ask_for_arma_path():
+            """Ask user for path to arma3.exe
+            """
+            arma_exe_path = input('Please enter path to your arma3.exe (ie. C:\\Arma3\\arma3.exe)')
+            log.info('User responded %s', arma_exe_path)
+            return arma_exe_path
+
+        log.info('Asking the user for path to arma3.exe')
+        # Ask user for path to arma3.exe
+        arma_exe_path = ask_for_arma_path()
+        while arma_exe_path == '':
+            log.warning('No entry provided, asking the user for path to arma3.exe again')
+            print('No path provided, please provide a path.')
+            arma_exe_path = ask_for_arma_path()
+        while not os.path.isfile(arma_exe_path):
+            log.warning('Invalid entry provided, asking the user for path to arma3.exe again')
+            print('Invalid path provided, please provide correct path.')
+            arma_exe_path = ask_for_arma_path()
+            log.info('Arma3 path is a file')
         return arma_exe_path
 
-    log = logging.getLogger('pymodsync_logger')
     log.info('Reading registry for steam path')
     arma_exe_path = ''
     steam_exe_path = ''
@@ -157,50 +211,11 @@ def game_path_requester():
                 return [steam_exe_path, arma_exe_path]
             except (OSError, FileNotFoundError, EnvironmentError) as err:
                 log.debug(err)
-                print('Path to steam not found in registry')
-                log.info('Path to steam not found in registry')
-                log.info('Asking user if steam is installed')
-                # Ask user if steam is installed
-                steam_installed = ask_if_steam_is_installed()
-                # Check if users response is valid
-                while steam_installed not in ('yes', 'y', 'no', 'n'):
-                    # if not, ask again
-                    log.warning('Invalid entry provided, asking the user if steam is installed again')
-                    print('Invalid entry, valid entries are YES, NO, N, Y')
-                    steam_installed = ask_if_steam_is_installed()
-                if steam_installed in ('yes', 'y'):
-                    # If user responded that steam is installed, ask him for path to steam
-                    log.info('Asking user for path to steam.exe')
-                    steam_exe_path = steam_path_requester()
-                    # Check if provided path ends in file and if steam is installed
-                    while not os.path.isfile(steam_exe_path) and steam_installed in ('yes', 'y'):
-                        log.warning('Invalid entry provided, asking the user for path to steam.exe again')
-                        print('Invalid path provided.')
-                        # Ask user if steam is really installed
-                        steam_installed = ask_if_steam_is_installed()
-                        # Check validity of answer
-                        while steam_installed not in ('yes', 'y', 'no', 'n'):
-                            # if not, ask again
-                            log.warning('Invalid entry provided, asking the user if steam is installed again')
-                            print('Invalid entry, valid entries are YES, NO, N, Y')
-                            steam_installed = ask_if_steam_is_installed()
-                        if steam_installed in ('yes', 'y'):
-                            # Ask user for path to steam.exe
-                            steam_exe_path = steam_path_requester()
+                steam_exe_path = steam_path_requester()
+                if steam_exe_path != '':
                     return [steam_exe_path, arma_exe_path]
                 else:
-                    log.info('Asking the user for path to arma3.exe')
-                    # Ask user for path to arma3.exe
                     arma_exe_path = arma_path_requester()
-                    while arma_exe_path == '':
-                        log.warning('No entry provided, asking the user for path to arma3.exe again')
-                        print('No path provided, please provide a path.')
-                        arma_exe_path = arma_path_requester()
-                    while not os.path.isfile(arma_exe_path):
-                        log.warning('Invalid entry provided, asking the user for path to arma3.exe again')
-                        print('Invalid path provided, please provide correct path.')
-                        arma_exe_path = arma_path_requester()
-                        log.info('Arma3 path is a file')
                     return [steam_exe_path, arma_exe_path]
     # Raise exception if all else fails
     except (OSError, EnvironmentError):
