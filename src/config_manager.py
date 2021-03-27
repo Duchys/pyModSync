@@ -64,7 +64,7 @@ def check_if_config_exists():
     """Checks if the configration file is already created
     """
     # Check if data directory for program files exists
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
 
     if not os.path.exists(DATA_DIRECTORY):
         os.makedirs(DATA_DIRECTORY)
@@ -73,7 +73,7 @@ def check_if_config_exists():
     else:
         log.info('%s exists...', DATA_DIRECTORY)
 
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
 
     log.info('checking if configuration file exists')
     # Check if config file exists
@@ -92,7 +92,7 @@ def check_if_config_exists():
 def game_path_requester():
     """Finds to path to the steam.exe or arma.exe from registry or user input
     """
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
 
     def read_steam_registry(steam_reg_location):
         """Read Steam key registry for install path location and verify it
@@ -230,7 +230,7 @@ def game_path_requester():
 def local_addon_path_requester():
     """Ask user for local addon path and verify it, if it does not exist create it.
     """
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
 
     def ask_for_local_addon_path():
         """Ask user for local addon path.
@@ -297,7 +297,7 @@ def local_addon_path_requester():
 def remote_repository_url_requester():
     """Ask user for remote repostiory url and verify if it is available.
     """
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
 
     def ask_for_remote_repository_url():
         """Ask the user for remote repository url.
@@ -358,7 +358,7 @@ def remote_repository_url_requester():
 def create_config():
     """Generates config file on the initial start of the application
     """
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
     config = configparser.ConfigParser(allow_no_value=True)
 
     # Check if data directory for program files exists
@@ -448,7 +448,7 @@ def create_config():
 def config_loader():
     """Loads the configuration file and returns the values as variables
     """
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
     log.info('Loading configuration')
     config = configparser.ConfigParser()
     if os.name == 'nt':
@@ -503,5 +503,8 @@ def config_loader():
     log.info('Loaded log level: %s', log_level)
     log.info('Loaded log file path: %s', log_file_path)
 
+    # Empty values are returned in order to keep Windows and Linux config loader the same
+    empty5 = None
+    empty6 = None
     return [remote_repository_url, local_repository, repository_difference_outfile,
-            remote_repository_destination_path, local_addon_path, log_level, log_file_path]
+            remote_repository_destination_path, local_addon_path, empty5, empty6, log_level, log_file_path]
