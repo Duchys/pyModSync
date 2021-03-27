@@ -69,11 +69,11 @@ def file_downloader(file_url, file_destination_path):
         # If page is not found
         elif url_check_status_code == 404:
             log.warning('Download failed, current retry count is %s', retry_count)
-            retry_count = retry_count + 1
+            retry_count += 1
         # If not 200 and 404 code is found
         else:
             log.warning('Download failed, current retry count is %s', retry_count)
-            retry_count = retry_count + 1
+            retry_count += 1
     if file_status is False:
         log.error('Retry amount for %s reached', file_url)
         sys.exit('Retry amount reached, file not downloaded, exiting...')
