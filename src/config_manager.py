@@ -78,8 +78,7 @@ def check_if_config_exists():
     log.info('checking if configuration file exists')
     # Check if config file exists
     if os.path.isfile(CONFIG_LOCATION):
-        log.info('Config file found')
-        print('Configuration file found, loading configuration...')
+        log.debug('Config file found')
         return 1
 
     log.info('No config file found')

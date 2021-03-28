@@ -10,7 +10,6 @@ def update_addons():
     """
     # Load config
     check_if_config_exists()
-    print('loading the config...')
     config = config_loader()
     remote_repository_url = config[0]
     local_repository = config[1]
