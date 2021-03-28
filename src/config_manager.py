@@ -64,7 +64,7 @@ def check_if_config_exists():
     """Checks if the configration file is already created
     """
     # Check if data directory for program files exists
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
 
     if not os.path.exists(DATA_DIRECTORY):
         os.makedirs(DATA_DIRECTORY)
@@ -73,130 +73,142 @@ def check_if_config_exists():
     else:
         log.info('%s exists...', DATA_DIRECTORY)
 
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
 
-    log.info('checking if configuration file exists')
+    log.debug('checking if configuration file exists')
     # Check if config file exists
     if os.path.isfile(CONFIG_LOCATION):
-        log.info('Config file found')
-        print('Configuration file found, loading configuration...')
+        log.debug('Config file found')
         return 1
 
-    log.info('No config file found')
+    log.debug('No config file found')
     # Calling create config fuction
     log.debug('Calling create_config fuction.')
     create_config()
     return 0
 
 
+def read_steam_registry(steam_reg_location):
+    """Read Steam key registry for install path location and verify it
+    """
+    # Winreg is imported in here instead of top level, as it would otherwise crash the program on Linux Systems
+    import winreg  # pylint: disable=import-error,import-outside-toplevel
+    log = logging.getLogger('default_logger')
+    log.info('Opening 64-bit Steam registry key')
+    print('Opening 64-bit Steam registry key')
+    # Open 64-bit steam registry key
+    steam_reg_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, steam_reg_location)
+    # Read values from InstallPath
+    steam_exe_path = winreg.QueryValueEx(steam_reg_key, "InstallPath")
+    # Add steam.exe to the install path fo steam
+    steam_exe_path = str(steam_exe_path[0]) + "\\steam.exe"
+    # Toss a exception if path is not found
+    log.info('Checking if steam.exe path value from registry is valid')
+    if os.path.isfile(steam_exe_path):
+        log.info('Steam path from registry is valid')
+        return steam_exe_path
+    log.warning('Steam path from registry is invalid')
+    raise FileNotFoundError(f'{steam_exe_path} not found') from FileNotFoundError
+
+
+def ask_if_steam_is_installed():
+    """Ask user if steam is installed.
+    """
+    log = logging.getLogger('default_logger')
+    steam_installed = input('Is steam installed? [YES/no]') or 'yes'
+    steam_installed = steam_installed.lower()
+    log.info('User responded %s', steam_installed)
+    return steam_installed
+
+
+def ask_for_steam_path():
+    """Ask user for steam path
+    """
+    log = logging.getLogger('default_logger')
+    steam_exe_path = input('Please enter path to the steam.exe (ie. C:\\Steam\\steam.exe)')
+    log.info('User responded %s', steam_exe_path)
+    return steam_exe_path
+
+
+def steam_path_requester():
+    """Ask user for steam path and validate it.
+    """
+    log = logging.getLogger('default_logger')
+    print('Path to steam not found in registry')
+    log.info('Path to steam not found in registry')
+    log.info('Asking user if steam is installed')
+    # Ask user if steam is installed
+    steam_installed = ask_if_steam_is_installed()
+    # Check if users response is valid
+    while steam_installed not in ('yes', 'y', 'no', 'n'):
+        # if not, ask again
+        log.warning('Invalid entry provided, asking the user if steam is installed again')
+        print('Invalid entry, valid entries are YES, NO, N, Y')
+        steam_installed = ask_if_steam_is_installed()
+    while steam_installed in ('yes', 'y'):
+        # If user responded that steam is installed, ask him for path to steam
+        log.info('Asking user for path to steam.exe')
+        steam_exe_path = ask_for_steam_path()
+        # Check if provided path ends in file and if steam is installed
+        while not os.path.isfile(steam_exe_path) and steam_installed in ('yes', 'y'):
+            log.warning('Invalid entry provided, asking the user for path to steam.exe again')
+            print('Invalid path provided.')
+            # Ask user if steam is really installed
+            steam_installed = ask_if_steam_is_installed()
+            # Check validity of answer
+            while steam_installed not in ('yes', 'y', 'no', 'n'):
+                # if not, ask again
+                log.warning('Invalid entry provided, asking the user if steam is installed again')
+                print('Invalid entry, valid entries are YES, NO, N, Y')
+                steam_installed = ask_if_steam_is_installed()
+            if steam_installed in ('yes', 'y'):
+                # Ask user for path to steam.exe
+                steam_exe_path = ask_for_steam_path()
+        if steam_installed in ('yes', 'y'):
+            return steam_exe_path
+    steam_exe_path = ''
+    return steam_exe_path
+
+
+def ask_for_arma_path():
+    """Ask user for path to arma3.exe
+    """
+    log = logging.getLogger('default_logger')
+    arma_exe_path = input('Please enter path to your arma3.exe (ie. C:\\Arma3\\arma3.exe)')
+    log.info('User responded %s', arma_exe_path)
+    return arma_exe_path
+
+
+def arma_path_requester():
+    """Ask user for path to arma3.exe and validate it
+    """
+
+    log = logging.getLogger('default_logger')
+    log.info('Asking the user for path to arma3.exe')
+    # Ask user for path to arma3.exe
+    arma_exe_path = ask_for_arma_path()
+    while arma_exe_path == '':
+        log.warning('No entry provided, asking the user for path to arma3.exe again')
+        print('No path provided, please provide a path.')
+        arma_exe_path = ask_for_arma_path()
+    while not os.path.isfile(arma_exe_path):
+        log.warning('Invalid entry provided, asking the user for path to arma3.exe again')
+        print('Invalid path provided, please provide correct path.')
+        arma_exe_path = ask_for_arma_path()
+        log.info('Arma3 path is a file')
+    return arma_exe_path
+
+
 def game_path_requester():
     """Finds to path to the steam.exe or arma.exe from registry or user input
     """
-    log = logging.getLogger('pymodsync_logger')
-
-    def read_steam_registry(steam_reg_location):
-        """Read Steam key registry for install path location and verify it
-        """
-        log.info('Opening 64-bit Steam registry key')
-        print('Opening 64-bit Steam registry key')
-        # Open 64-bit steam registry key
-        steam_reg_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, steam_reg_location)
-        # Read values from InstallPath
-        steam_exe_path = winreg.QueryValueEx(steam_reg_key, "InstallPath")
-        # Add steam.exe to the install path fo steam
-        steam_exe_path = str(steam_exe_path[0]) + "\\steam.exe"
-        # Toss a exception if path is not found
-        log.info('Checking if steam.exe path value from registry is valid')
-        if os.path.isfile(steam_exe_path):
-            log.info('Steam path from registry is valid')
-            return steam_exe_path
-        log.warning('Steam path from registry is invalid')
-        raise FileNotFoundError(f'{steam_exe_path} not found') from FileNotFoundError
-
-    def ask_if_steam_is_installed():
-        """Ask user if steam is installed.
-        """
-        steam_installed = input('Is steam installed? [YES/no]') or 'yes'
-        steam_installed = steam_installed.lower()
-        log.info('User responded %s', steam_installed)
-        return steam_installed
-
-    def steam_path_requester():
-        """Ask user for steam path and validate it.
-        """
-        def ask_for_steam_path():
-            """Ask user for steam path
-            """
-            steam_exe_path = input('Please enter path to the steam.exe (ie. C:\\Steam\\steam.exe)')
-            log.info('User responded %s', steam_exe_path)
-            return steam_exe_path
-
-        print('Path to steam not found in registry')
-        log.info('Path to steam not found in registry')
-        log.info('Asking user if steam is installed')
-        # Ask user if steam is installed
-        steam_installed = ask_if_steam_is_installed()
-        # Check if users response is valid
-        while steam_installed not in ('yes', 'y', 'no', 'n'):
-            # if not, ask again
-            log.warning('Invalid entry provided, asking the user if steam is installed again')
-            print('Invalid entry, valid entries are YES, NO, N, Y')
-            steam_installed = ask_if_steam_is_installed()
-        while steam_installed in ('yes', 'y'):
-            # If user responded that steam is installed, ask him for path to steam
-            log.info('Asking user for path to steam.exe')
-            steam_exe_path = ask_for_steam_path()
-            # Check if provided path ends in file and if steam is installed
-            while not os.path.isfile(steam_exe_path) and steam_installed in ('yes', 'y'):
-                log.warning('Invalid entry provided, asking the user for path to steam.exe again')
-                print('Invalid path provided.')
-                # Ask user if steam is really installed
-                steam_installed = ask_if_steam_is_installed()
-                # Check validity of answer
-                while steam_installed not in ('yes', 'y', 'no', 'n'):
-                    # if not, ask again
-                    log.warning('Invalid entry provided, asking the user if steam is installed again')
-                    print('Invalid entry, valid entries are YES, NO, N, Y')
-                    steam_installed = ask_if_steam_is_installed()
-                if steam_installed in ('yes', 'y'):
-                    # Ask user for path to steam.exe
-                    steam_exe_path = ask_for_steam_path()
-            if steam_installed in ('yes', 'y'):
-                return steam_exe_path
-        steam_exe_path = ''
-        return steam_exe_path
-
-    def arma_path_requester():
-        """Ask user for path to arma3.exe and validate it
-        """
-        def ask_for_arma_path():
-            """Ask user for path to arma3.exe
-            """
-            arma_exe_path = input('Please enter path to your arma3.exe (ie. C:\\Arma3\\arma3.exe)')
-            log.info('User responded %s', arma_exe_path)
-            return arma_exe_path
-
-        log.info('Asking the user for path to arma3.exe')
-        # Ask user for path to arma3.exe
-        arma_exe_path = ask_for_arma_path()
-        while arma_exe_path == '':
-            log.warning('No entry provided, asking the user for path to arma3.exe again')
-            print('No path provided, please provide a path.')
-            arma_exe_path = ask_for_arma_path()
-        while not os.path.isfile(arma_exe_path):
-            log.warning('Invalid entry provided, asking the user for path to arma3.exe again')
-            print('Invalid path provided, please provide correct path.')
-            arma_exe_path = ask_for_arma_path()
-            log.info('Arma3 path is a file')
-        return arma_exe_path
+    log = logging.getLogger('default_logger')
 
     log.info('Reading registry for steam path')
     arma_exe_path = ''
     steam_exe_path = ''
 
     try:
-        # Winreg is imported in here instead of top level, as it would otherwise crash the program on Linux Systems
-        import winreg  # pylint: disable=import-error,import-outside-toplevel
         # Registry keys for steam install location
         steam_reg_location_32bit = "SOFTWARE\\Valve\\Steam"
         steam_reg_location_64bit = "SOFTWARE\\WOW6432Node\\Valve\\Steam"
@@ -215,6 +227,7 @@ def game_path_requester():
                     return [steam_exe_path, arma_exe_path]
                 arma_exe_path = arma_path_requester()
                 return [steam_exe_path, arma_exe_path]
+
     # Raise exception if all else fails
     except (OSError, EnvironmentError):
         print('Unhandled exception located, report steps taken to application author')
@@ -230,7 +243,7 @@ def game_path_requester():
 def local_addon_path_requester():
     """Ask user for local addon path and verify it, if it does not exist create it.
     """
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
 
     def ask_for_local_addon_path():
         """Ask user for local addon path.
@@ -297,7 +310,7 @@ def local_addon_path_requester():
 def remote_repository_url_requester():
     """Ask user for remote repostiory url and verify if it is available.
     """
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
 
     def ask_for_remote_repository_url():
         """Ask the user for remote repository url.
@@ -358,7 +371,7 @@ def remote_repository_url_requester():
 def create_config():
     """Generates config file on the initial start of the application
     """
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
     config = configparser.ConfigParser(allow_no_value=True)
 
     # Check if data directory for program files exists
@@ -448,7 +461,7 @@ def create_config():
 def config_loader():
     """Loads the configuration file and returns the values as variables
     """
-    log = logging.getLogger('pymodsync_logger')
+    log = logging.getLogger('default_logger')
     log.info('Loading configuration')
     config = configparser.ConfigParser()
     if os.name == 'nt':
@@ -470,14 +483,14 @@ def config_loader():
         log_level = config['LOGGING']['log_level']
         log_file_path = config['LOGGING']['log_file_path']
 
-        log.info('Loaded remote repository URL: %s', remote_repository_url)
-        log.info('Loaded local repository path: %s', local_repository)
-        log.info('Loaded repository difference outfile path: %s', repository_difference_outfile)
-        log.info('Loaded remote repository destination path: %s', remote_repository_destination_path)
-        log.info('Loaded steam.exe path: %s', steam_exe_path)
-        log.info('Loaded arma3.exe path: %s', arma_exe_path)
-        log.info('Loaded log level: %s', log_level)
-        log.info('Loaded log file path: %s', log_file_path)
+        log.debug('Loaded remote repository URL: %s', remote_repository_url)
+        log.debug('Loaded local repository path: %s', local_repository)
+        log.debug('Loaded repository difference outfile path: %s', repository_difference_outfile)
+        log.debug('Loaded remote repository destination path: %s', remote_repository_destination_path)
+        log.debug('Loaded steam.exe path: %s', steam_exe_path)
+        log.debug('Loaded arma3.exe path: %s', arma_exe_path)
+        log.debug('Loaded log level: %s', log_level)
+        log.debug('Loaded log file path: %s', log_file_path)
 
         return [remote_repository_url, local_repository, repository_difference_outfile,
                 remote_repository_destination_path, local_addon_path, steam_exe_path,
@@ -503,5 +516,8 @@ def config_loader():
     log.info('Loaded log level: %s', log_level)
     log.info('Loaded log file path: %s', log_file_path)
 
+    # Empty values are returned in order to keep Windows and Linux config loader the same
+    empty5 = None
+    empty6 = None
     return [remote_repository_url, local_repository, repository_difference_outfile,
-            remote_repository_destination_path, local_addon_path, log_level, log_file_path]
+            remote_repository_destination_path, local_addon_path, empty5, empty6, log_level, log_file_path]
