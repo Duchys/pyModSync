@@ -3,11 +3,13 @@ from update_manager import file_update_requester
 from update_manager import compare_repositories
 from config_manager import config_loader
 from config_manager import check_if_config_exists
+from logger import logger
 
 
 def update_addons():
     """Update out of date addons
     """
+    log = logger()
     # Load config
     check_if_config_exists()
     config = config_loader()
@@ -22,5 +24,7 @@ def update_addons():
     while check_for_update(local_repository, remote_repository_destination_path, repository_difference_outfile):
         file_update_requester(remote_repository_url, repository_difference_outfile, local_addon_path, local_repository)
         compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile)
+
+    log.info('All files are now synchronized with the remote repository')
     print('All files are now synchronized with the remote repository...')
     print('Exiting...')
