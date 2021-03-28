@@ -75,13 +75,13 @@ def check_if_config_exists():
 
     log = logging.getLogger('default_logger')
 
-    log.info('checking if configuration file exists')
+    log.debug('checking if configuration file exists')
     # Check if config file exists
     if os.path.isfile(CONFIG_LOCATION):
         log.debug('Config file found')
         return 1
 
-    log.info('No config file found')
+    log.debug('No config file found')
     # Calling create config fuction
     log.debug('Calling create_config fuction.')
     create_config()
@@ -483,14 +483,14 @@ def config_loader():
         log_level = config['LOGGING']['log_level']
         log_file_path = config['LOGGING']['log_file_path']
 
-        log.info('Loaded remote repository URL: %s', remote_repository_url)
-        log.info('Loaded local repository path: %s', local_repository)
-        log.info('Loaded repository difference outfile path: %s', repository_difference_outfile)
-        log.info('Loaded remote repository destination path: %s', remote_repository_destination_path)
-        log.info('Loaded steam.exe path: %s', steam_exe_path)
-        log.info('Loaded arma3.exe path: %s', arma_exe_path)
-        log.info('Loaded log level: %s', log_level)
-        log.info('Loaded log file path: %s', log_file_path)
+        log.debug('Loaded remote repository URL: %s', remote_repository_url)
+        log.debug('Loaded local repository path: %s', local_repository)
+        log.debug('Loaded repository difference outfile path: %s', repository_difference_outfile)
+        log.debug('Loaded remote repository destination path: %s', remote_repository_destination_path)
+        log.debug('Loaded steam.exe path: %s', steam_exe_path)
+        log.debug('Loaded arma3.exe path: %s', arma_exe_path)
+        log.debug('Loaded log level: %s', log_level)
+        log.debug('Loaded log file path: %s', log_file_path)
 
         return [remote_repository_url, local_repository, repository_difference_outfile,
                 remote_repository_destination_path, local_addon_path, steam_exe_path,
