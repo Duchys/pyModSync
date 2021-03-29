@@ -2,7 +2,7 @@ from update_manager import check_for_update
 from update_manager import file_update_requester
 from update_manager import compare_repositories
 from config_manager import config_loader
-from config_manager import check_if_config_exists
+from config_manager import create_config_if_not_exist
 from logger import logger
 
 
@@ -11,7 +11,7 @@ def update_addons():
     """
     log = logger()
     # Load config
-    check_if_config_exists()
+    create_config_if_not_exist()
     config = config_loader()
     remote_repository_url = config[0]
     local_repository = config[1]

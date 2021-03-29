@@ -3,7 +3,7 @@ import subprocess
 import traceback
 import sys
 from config_manager import config_loader
-from config_manager import check_if_config_exists
+from config_manager import create_config_if_not_exist
 from logger import logger
 
 
@@ -14,7 +14,7 @@ def get_modlist():
     log = logger()
     # Prepare list
     mod_list = []
-    check_if_config_exists()
+    create_config_if_not_exist()
     config = config_loader()
     remote_repository = config[3]
     local_addon_path = config[4]
@@ -85,11 +85,14 @@ def game_launcher():
         mod_list = [s.replace('/', '\\') for s in mod_list]
         log.debug('mod list prepared as: %s', mod_list)
         # Prepare launch command
-        launch_command = (f"steam -applaunch 107410 -mod='{';'.join(mod_list)}'")
+        # launch_command = (f'steam -applaunch 107410 -nolauncher -mod='{";".join(mod_list)}')
+        mod_list = ';'.join(mod_list)
+        launch_command = ["steam", "-applaunch", "107410", "-nolauncher"]
         log.debug('Game launch command prepared: %s', launch_command)
         # Attempt to launch Arma 3
         try:
-            subprocess.run(launch_command, shell=True, check=True)
+            print(launch_command)
+            subprocess.call(launch_command)
         # In case it print traceback and exit
         except subprocess.CalledProcessError:
             game_launch_failed(launch_command)
