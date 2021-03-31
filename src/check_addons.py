@@ -1,5 +1,5 @@
 from config_manager import config_loader
-from config_manager import check_if_config_exists
+from config_manager import create_config_if_not_exist
 from repository_downloader import repository_downloader
 from local_repository_manager import check_for_local_repository
 from update_manager import compare_repositories
@@ -22,7 +22,7 @@ def check_addons():
     and remote mod repository (eg. 417RCT Official Repository)
     """
     # Check if config file exists, if not create it
-    check_if_config_exists()
+    create_config_if_not_exist()
     # Define log config by calling logger function
     log = logger()
     log.info('Loading configuration')

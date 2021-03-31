@@ -3,19 +3,10 @@ import os
 import logging
 import sys
 import traceback
-from logging.handlers import RotatingFileHandler
 import requests
-
+from default_logger import default_logger
 
 # Setup logging
-# Log level (options: CRITICAL, ERROR, WARNING, INFO, DEBUG, NOTSET)
-LOG_LEVEL = 'DEBUG'
-# 'a' for append, 'w' for write
-LOG_WRITE_MODE = 'a'
-# Max filesize before rotating in bytes
-LOG_ROTATE_MAX_SIZE = 5120000
-# Max file count
-LOG_ROTATE_MAX_FILES = 4
 # Check if Windows is used
 if os.name == 'nt':
     # Set DATA directory for Windows systems
@@ -34,37 +25,14 @@ else:
     CONFIG_LOCATION = CONFIG_DIRECTORY + '/pymodsync.properties'
     LOG_FILE_PATH = DATA_DIRECTORY + '/pymodsync.log'
 
-# Create log directory for log files
-if not os.path.exists(DATA_DIRECTORY):
-    os.makedirs(DATA_DIRECTORY)
-    print('Data Directory created in %s', DATA_DIRECTORY)
-
-
-# Log handlers
-# Filename = place where to store the logs
-# mode = sets appending or overwriting of log files
-# maxBytes = log rotating after set filesize
-# backupCount = 4 number of files to keep
-
-
-handlers = [
-    RotatingFileHandler(filename=LOG_FILE_PATH, mode=LOG_WRITE_MODE,
-                        maxBytes=LOG_ROTATE_MAX_SIZE, backupCount=LOG_ROTATE_MAX_FILES)
-           ]
-
-# Set date format of logs to yyyy-mm-dd hh:mm:ss
-DATE_FORMAT = '%Y-%m-%d %H:%M:%S'
-# Set log format to 'DATE_FORMAT.fff - [LOG_LEVEL] - LOG_MESSAGE
-LOG_FORMAT = '%(asctime)s.%(msecs)03d - [%(levelname)s] - %(message)s'
-
-logging.basicConfig(handlers=handlers, level=LOG_LEVEL, format=LOG_FORMAT, datefmt=DATE_FORMAT)
+LOG_LEVEL = 'DEBUG'
 
 
 def check_if_config_exists():
     """Checks if the configration file is already created
     """
     # Check if data directory for program files exists
-    log = logging.getLogger('default_logger')
+    log = default_logger()
 
     if not os.path.exists(DATA_DIRECTORY):
         os.makedirs(DATA_DIRECTORY)
@@ -73,18 +41,10 @@ def check_if_config_exists():
     else:
         log.info('%s exists...', DATA_DIRECTORY)
 
-    log = logging.getLogger('default_logger')
-
     log.debug('checking if configuration file exists')
     # Check if config file exists
     if os.path.isfile(CONFIG_LOCATION):
-        log.debug('Config file found')
         return 1
-
-    log.debug('No config file found')
-    # Calling create config fuction
-    log.debug('Calling create_config fuction.')
-    create_config()
     return 0
 
 
@@ -93,7 +53,7 @@ def read_steam_registry(steam_reg_location):
     """
     # Winreg is imported in here instead of top level, as it would otherwise crash the program on Linux Systems
     import winreg  # pylint: disable=import-error,import-outside-toplevel
-    log = logging.getLogger('default_logger')
+    log = default_logger()
     log.info('Opening 64-bit Steam registry key')
     print('Opening 64-bit Steam registry key')
     # Open 64-bit steam registry key
@@ -114,7 +74,7 @@ def read_steam_registry(steam_reg_location):
 def ask_if_steam_is_installed():
     """Ask user if steam is installed.
     """
-    log = logging.getLogger('default_logger')
+    log = default_logger()
     steam_installed = input('Is steam installed? [YES/no]') or 'yes'
     steam_installed = steam_installed.lower()
     log.info('User responded %s', steam_installed)
@@ -122,9 +82,9 @@ def ask_if_steam_is_installed():
 
 
 def ask_for_steam_path():
-    """Ask user for steam path
+    """Ask user for steam path.
     """
-    log = logging.getLogger('default_logger')
+    log = default_logger()
     steam_exe_path = input('Please enter path to the steam.exe (ie. C:\\Steam\\steam.exe)')
     log.info('User responded %s', steam_exe_path)
     return steam_exe_path
@@ -133,7 +93,7 @@ def ask_for_steam_path():
 def steam_path_requester():
     """Ask user for steam path and validate it.
     """
-    log = logging.getLogger('default_logger')
+    log = default_logger()
     print('Path to steam not found in registry')
     log.info('Path to steam not found in registry')
     log.info('Asking user if steam is installed')
@@ -173,7 +133,7 @@ def steam_path_requester():
 def ask_for_arma_path():
     """Ask user for path to arma3.exe
     """
-    log = logging.getLogger('default_logger')
+    log = default_logger()
     arma_exe_path = input('Please enter path to your arma3.exe (ie. C:\\Arma3\\arma3.exe)')
     log.info('User responded %s', arma_exe_path)
     return arma_exe_path
@@ -183,7 +143,7 @@ def arma_path_requester():
     """Ask user for path to arma3.exe and validate it
     """
 
-    log = logging.getLogger('default_logger')
+    log = default_logger()
     log.info('Asking the user for path to arma3.exe')
     # Ask user for path to arma3.exe
     arma_exe_path = ask_for_arma_path()
@@ -202,7 +162,7 @@ def arma_path_requester():
 def game_path_requester():
     """Finds to path to the steam.exe or arma.exe from registry or user input
     """
-    log = logging.getLogger('default_logger')
+    log = default_logger()
 
     log.info('Reading registry for steam path')
     arma_exe_path = ''
@@ -243,7 +203,7 @@ def game_path_requester():
 def local_addon_path_requester():
     """Ask user for local addon path and verify it, if it does not exist create it.
     """
-    log = logging.getLogger('default_logger')
+    log = default_logger()
 
     def ask_for_local_addon_path():
         """Ask user for local addon path.
@@ -368,10 +328,10 @@ def remote_repository_url_requester():
         sys.exit()
 
 
-def create_config():
-    """Generates config file on the initial start of the application
+def config_creator():
+    """Generates config file on the initial start of the application.
     """
-    log = logging.getLogger('default_logger')
+    log = default_logger()
     config = configparser.ConfigParser(allow_no_value=True)
 
     # Check if data directory for program files exists
@@ -458,10 +418,22 @@ def create_config():
     print('Config created')
 
 
+def create_config_if_not_exist():
+    """If check_if_config_exists returns false
+    call config_creator fuction to create config.
+    """
+    log = default_logger()
+    print('franta')
+    if check_if_config_exists() is False:
+        # Calling create config fuction
+        log.debug('Calling config_creator fuction.')
+        config_creator()
+
+
 def config_loader():
     """Loads the configuration file and returns the values as variables
     """
-    log = logging.getLogger('default_logger')
+    log = default_logger()
     log.info('Loading configuration')
     config = configparser.ConfigParser()
     if os.name == 'nt':
