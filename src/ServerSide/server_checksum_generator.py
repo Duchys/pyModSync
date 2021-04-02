@@ -27,24 +27,28 @@ import os
 # based on the provided modlist and source addon directory
 
 
+def sorted_file_listing(base_dir):
+    """Yeild paths in the provided base_dir
+    """
+    for directory, subdirs, files in sorted(os.walk(base_dir)):
+        for filename in files:
+            yield os.path.join(directory, filename)
+
+
+def file_hash_hex(file_path, hash_func):
+    """Fuction used for hashing
+    """
+    with open(file_path, 'rb') as file:
+        return hash_func(file.read()).hexdigest()
+
+
 def remote_repository_generator():
     """Generate server repository
     """
-    def file_hash_hex(file_path, hash_func):
-        """Fuction used for hashing
-        """
-        with open(file_path, 'rb') as file:
-            return hash_func(file.read()).hexdigest()
 
-    def sorted_file_listing(base_dir):
-        """Yeild paths in the provided base_dir
-        """
-        for directory, subdirs, files in sorted(os.walk(base_dir)):
-            for filename in files:
-                yield os.path.join(directory, filename)
     # prepares list of mods used in the repository for use in the checksum generator
     modlist = []
-    with open(path_to_modlist, 'r') as modlistcsv:
+    with open(path_to_modlist, 'r', encodinf='utf-8') as modlistcsv:
         for row in modlistcsv:
             modlist.append(row)
 

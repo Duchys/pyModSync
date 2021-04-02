@@ -423,7 +423,6 @@ def create_config_if_not_exist():
     call config_creator fuction to create config.
     """
     log = default_logger()
-    print('franta')
     if check_if_config_exists() is False:
         # Calling create config fuction
         log.debug('Calling config_creator fuction.')
