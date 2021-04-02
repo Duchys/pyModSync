@@ -1,6 +1,7 @@
 import os
 import csv
 import hashlib
+import concurrent.futures
 from local_repository_manager import file_hash_hex
 from file_downloader import file_downloader
 from logger import logger
@@ -13,15 +14,15 @@ def compare_repositories(local_repository, remote_repository_destination_path, r
     log.info('Comparing repositories')
     # Opens repo csv files
     log.debug('Opening local repository in path: %s', local_repository)
-    with open(local_repository, 'r', encoding="utf8") as local_repo:
+    with open(local_repository, 'r', encoding="utf-8") as local_repo:
         local_repo = local_repo.readlines()
     log.debug('Opening remote repository in path: %s', remote_repository_destination_path)
-    with open(remote_repository_destination_path, 'r', encoding="utf8") as remote_repo:
+    with open(remote_repository_destination_path, 'r', encoding="utf-8") as remote_repo:
         # Skips first 2 lines
         remote_repo = remote_repo.readlines()[2:]
     # Compares local repository with remote repostitory
     log.debug('Creating repository difference outfile i npath: %s', repository_difference_outfile)
-    with open(repository_difference_outfile, 'w', encoding="utf8") as repo_diff:
+    with open(repository_difference_outfile, 'w', encoding="utf-8") as repo_diff:
         # Each line present in remote repostiory gets compared to the local_repository.
         # If the line is not present (ie. not exact match) it gets put to a repo_diff .csv file.
         for line in remote_repo:
@@ -54,7 +55,7 @@ def update_checksum(updated_file, local_repository, updated_file_path):
     # Read local repository to memory
     log = logger()
     log.debug('Reading %s to memory', local_repository)
-    with open(local_repository, encoding="utf8") as inlocalrepo:
+    with open(local_repository, encoding="utf-8") as inlocalrepo:
         reader = csv.reader(inlocalrepo.readlines(), delimiter='\t')
 
     local_repository_temp_destination = local_repository+'_temp'
@@ -81,8 +82,26 @@ def update_checksum(updated_file, local_repository, updated_file_path):
     print('...........................................')
 
 
+def update_process(line, local_addon_path, local_repository, remote_addon_path):
+    """Request download of updated a file and update local repository with new checksum.
+    """
+    log = logger()
+    updated_file = line[0]
+    log.info("Thread %s: starting", line)
+    # Sets up the path to the url containing the addon
+    updated_file_url = remote_addon_path+line[0]
+    # Sets up the path to the url containing the addon
+    download_path = local_addon_path+'/'+line[0]
+    # Provides the url to addon and addon path to the file_downloader function
+    log.info('Requsting download of %s', updated_file_url)
+    file_downloader(updated_file_url, download_path)
+    log.debug('Updating checksum of %s', updated_file)
+    update_checksum(updated_file, local_repository, download_path)
+    log.info("Thread %s: finishing", line)
+
+
 def file_update_requester(remote_repository_url, repository_difference_outfile, local_addon_path, local_repository):
-    """Requests download of updated file
+    """Requests download of update of a file.
     """
     log = logger()
     # This file requests files found in repository_difference_outfile
@@ -91,16 +110,15 @@ def file_update_requester(remote_repository_url, repository_difference_outfile, 
     # Remove filename of repository in order to reuse the repository url as a link to the remote addon folder
     remote_addon_path = remote_repository_url.replace(remote_repository_filename, '')
     log.debug('Opening repository difference file from path: %s', repository_difference_outfile)
-    with open(repository_difference_outfile, 'r') as repo_diff:
+    # Open repository difference file for reading
+    with open(repository_difference_outfile, 'r', encoding="utf-8") as repo_diff:
         reader = csv.reader(repo_diff, delimiter='\t')
-        for line in reader:
-            updated_file = line[0]
-            # Sets up the path to the url containing the addon
-            updated_file_url = remote_addon_path+line[0]
-            # Sets up the path to the url containing the addon
-            download_path = local_addon_path+'/'+line[0]
-            # Provides the url to addon and addon path to the file_downloader function
-            log.info('Requsting download of %s', updated_file_url)
-            file_downloader(updated_file_url, download_path)
-            log.debug('Updating checksum of %s', updated_file)
-            update_checksum(updated_file, local_repository, download_path)
+        # Preprare threading executor with 10 threads
+        executor = concurrent.futures.ThreadPoolExecutor(10)
+        # For every line in reader execute the update_process function 
+        # until the count of executor is less than 10
+        futures = [executor.submit(update_process, line,
+                                   local_addon_path, local_repository, remote_addon_path)
+                   for line in reader]
+        # Wait for all threads to finish
+        concurrent.futures.wait(futures)
