@@ -115,7 +115,7 @@ def file_update_requester(remote_repository_url, repository_difference_outfile, 
         reader = csv.reader(repo_diff, delimiter='\t')
         # Preprare threading executor with 10 threads
         executor = concurrent.futures.ThreadPoolExecutor(10)
-        # For every line in reader execute the update_process function 
+        # For every line in reader execute the update_process function
         # until the count of executor is less than 10
         futures = [executor.submit(update_process, line,
                                    local_addon_path, local_repository, remote_addon_path)
