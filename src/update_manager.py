@@ -2,6 +2,8 @@ import os
 import csv
 import hashlib
 import concurrent.futures
+import time
+from random import uniform
 from local_repository_manager import file_hash_hex
 from file_downloader import file_downloader
 from logger import logger
@@ -57,29 +59,41 @@ def update_checksum(updated_file, local_repository, updated_file_path):
     log.debug('Reading %s to memory', local_repository)
     with open(local_repository, encoding="utf-8") as inlocalrepo:
         reader = csv.reader(inlocalrepo.readlines(), delimiter='\t')
-
-    local_repository_temp_destination = local_repository+'_temp'
+    # inlocalrepo.close()
+    local_repository_temp_destination = local_repository + '_temp'
     log.debug('Creating temporary file %s', local_repository_temp_destination)
     # Create temporary file without the line containing the hash of the updated file
+    i = 0
+    local_repository_lock = local_repository + '_lock'
+    log.debug(os.path.isfile(local_repository_lock))
+    while os.path.isfile(local_repository_lock) and i < 15:
+        log.debug("%s exists sleeping", local_repository_lock)
+        # Generate random delay to lower the chance of both threads ending at the same time
+        random_delay = uniform(0, 0.7)
+        time.sleep(0.2 + random_delay)
+        i += 1
+    write_lock = open(local_repository_lock, 'w')
+    write_lock.write('This file can be safely deleted, it was created by checksum generation of ' + updated_file)
+    write_lock.close()
     with open(local_repository_temp_destination, 'w', newline='', encoding='utf-8') as outlocalrepo:
         writer = csv.writer(outlocalrepo, delimiter='\t', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         log.info('Updating checksum of %s', updated_file)
-        print(f'Updating checksum of {updated_file}')
         for line in reader:
-            # If the line does not contain the filaneme of the updated file it will be rewriten to the updated repo
+            # If the line does not contain the filename of the updated file it will be rewriten to the updated repo
             if not updated_file == line[0]:
                 writer.writerow(line)
             else:
                 log.debug('Line containing %s found in the local repository, removing the line', updated_file)
-                print(f'Line containing {updated_file} found in the local repository, removing the line...')
         # Generate hash for the updated file on the end of the line
         writer.writerow((updated_file, file_hash_hex(updated_file_path, hashlib.blake2b)))
     # Move the temporary repository to the local_repository path
+    outlocalrepo.close()
     log.debug('Replacing %s with %s', local_repository, local_repository_temp_destination)
     os.replace(local_repository_temp_destination, local_repository)
     log.info('Checksum for %s was generated and saved to the local repository', updated_file)
-    print(f'Checksum for {updated_file} was generated and saved to the local repository...')
-    print('...........................................')
+    if os.path.exists(local_repository_lock):
+        os.remove(local_repository_lock)
+        log.debug('%s file was deleted', local_repository_lock)
 
 
 def update_process(line, local_addon_path, local_repository, remote_addon_path):
@@ -114,7 +128,7 @@ def file_update_requester(remote_repository_url, repository_difference_outfile, 
     with open(repository_difference_outfile, 'r', encoding="utf-8") as repo_diff:
         reader = csv.reader(repo_diff, delimiter='\t')
         # Preprare threading executor with 10 threads
-        executor = concurrent.futures.ThreadPoolExecutor(10)
+        executor = concurrent.futures.ThreadPoolExecutor(1)
         # For every line in reader execute the update_process function
         # until the count of executor is less than 10
         futures = [executor.submit(update_process, line,
@@ -122,3 +136,4 @@ def file_update_requester(remote_repository_url, repository_difference_outfile, 
                    for line in reader]
         # Wait for all threads to finish
         concurrent.futures.wait(futures)
+    repo_diff.close()
