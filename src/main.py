@@ -10,6 +10,8 @@ from update_addons import update_addons
 
 # Check if config file exists, if not create it, then create local addon repository
 # After that check for differences between local and remote repository
-check_addons()
-# Update out of date addons based on the output of check_addons function
-update_addons()
+if check_addons():
+    # Update out of date addons based on the output of check_addons function
+    update_addons()
+    
+print('Addons are up to date.') 

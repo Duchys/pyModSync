@@ -68,6 +68,7 @@ def local_repository_generator(local_addon_path, checksum_output_destination):
             log.debug('Generating checksum for %s', path_processed)
             print(f'Generating checksum for {path_processed}')
             writer.writerow((path_processed, file_hash_hex(path, hashlib.blake2b)))
+    outlocalrepo.close()
     # Move temporary checksum file to the final checksum destination
     log.debug('Moving temporary checksum file to: %s', checksum_output_destination)
     shutil.move(checksum_output_temp_destination, checksum_output_destination)

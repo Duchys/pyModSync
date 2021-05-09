@@ -27,4 +27,3 @@ def update_addons():
 
     log.info('All files are now synchronized with the remote repository')
     print('All files are now synchronized with the remote repository...')
-    print('Exiting...')

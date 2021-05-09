@@ -50,7 +50,6 @@ def file_downloader(file_url, file_destination_path):
     # Sets the path to which the file should be put
     # Write the file to prespecified path by user
     create_addon_path(file_destination_path)
-    print('...........................................')
     # Check if file is available
     log.info('Checking if the remote URL is reachable')
     file_status = False
@@ -60,7 +59,7 @@ def file_downloader(file_url, file_destination_path):
         if url_status_code == 200:
             # Get the total size of the file
             total_length = int(file_stream.headers.get('content-length', 0))
-            print(f'URL {file_url} returned status code 200, starting download')
+            # Lock stdout until the print finishes to prevent issues with threading
             log.info('%s returned status code 200, starting download', file_url)
             # create file download file in path file_destination_path and prepare to wirte to it
             # also sets up tqdm download progress bar
@@ -81,8 +80,9 @@ def file_downloader(file_url, file_destination_path):
                     size = downloaded_file.write(data)
                     # Update download bar based on downloaded size
                     download_bar.update(size)
+            downloaded_file.close()
+            download_bar.close()
             log.info('%s downloaded succesfully from URL %s', filename, file_url)
-            print(f'{filename} was sucessfully downloaded from URL {file_url}')
             file_status = True
         # If page is not found
         elif url_status_code == 404:
