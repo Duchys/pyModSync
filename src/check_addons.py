@@ -44,4 +44,6 @@ def check_addons():
     # Compare repositories for any differences, and write them to an outfile
     compare_repositories(local_repository, remote_repository_destination_path, repository_difference_outfile)
     # Check if there is difference between local and remote repository
-    check_for_update(local_repository, remote_repository_destination_path, repository_difference_outfile)
+    if check_for_update(local_repository, remote_repository_destination_path, repository_difference_outfile):
+        return 1
+    return 0
