@@ -1,8 +1,8 @@
 from check_addons import check_addons
 from update_addons import update_addons
 from interrupt_handler import interrupt_handler
-# Define variables
 
+# Call interupt handler to monitor possible user interuptions
 interrupt_handler()
 
 # Download remote repository
