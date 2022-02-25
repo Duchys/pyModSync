@@ -15,7 +15,7 @@ if os.name == 'nt':
     # Set Config directory for Windows systems
     CONFIG_LOCATION = CONFIG_DIRECTORY + '/pymodsync.properties'
     # Set log file path for Windows systems
-    LOG_FILE_PATH = DATA_DIRECTORY + '/pymodsync.log'
+    LOG_FILE_PATH = DATA_DIRECTORY + '/logs/pymodsync.log'
 # If not, hope for linux system
 else:
     # Set log path by expanding user home path from ~

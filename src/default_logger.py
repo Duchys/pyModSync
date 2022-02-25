@@ -11,16 +11,18 @@ def default_logger():
     if os.name == 'nt':
         # Set DATA directory for Windows systems
         data_directory = 'C:/ProgramData/pyModSync'
-        # Set log file path for Windows systems
-        log_file_path = data_directory + '/pymodsync.log'
     # If not, hope for linux system
     else:
         # Set log path by expanding user home path from ~
         user_home = os.path.expanduser("~")
         data_directory = user_home + '/.cache/pyModSync'
-        log_file_path = data_directory + '/pymodsync.log'
+
+    log_directory = data_directory + '/logs'
+    log_file_path = data_directory + '/logs/pymodsync.log'
+
     if not os.path.exists(data_directory):
         os.makedirs(data_directory)
+        os.makedirs(log_directory)
     # Log config
     # 'a' for append, 'w' for write
     log_write_mode = 'a'
