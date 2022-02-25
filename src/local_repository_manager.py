@@ -46,7 +46,7 @@ def local_repository_generator(local_addon_path, checksum_output_destination):
     """Generate local checksum repository which is then used for comparison between local and remote repo
     """
     log = logger()
-    checksum_output_temp_destination = checksum_output_destination+'_temp'
+    checksum_output_temp_destination = checksum_output_destination + '_temp'
     log.debug('Checksum temporary output destination set to %s', checksum_output_temp_destination)
 
     # Open temporary checksum file for writing

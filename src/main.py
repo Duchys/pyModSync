@@ -1,6 +1,9 @@
 from check_addons import check_addons
 from update_addons import update_addons
+from interrupt_handler import interrupt_handler
 # Define variables
+
+interrupt_handler()
 
 # Download remote repository
 # Compare with local repository
@@ -13,5 +16,5 @@ from update_addons import update_addons
 if check_addons():
     # Update out of date addons based on the output of check_addons function
     update_addons()
-    
-print('Addons are up to date.') 
+
+print('Addons are up to date.')

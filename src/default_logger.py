@@ -32,7 +32,7 @@ def default_logger():
     handlers = [
         RotatingFileHandler(filename=log_file_path, mode=log_write_mode,
                             maxBytes=log_rotate_max_size, backupCount=log_rotate_max_files)
-            ]
+    ]
 
     # Set date format of logs to yyyy-mm-dd hh:mm:ss
     data_format = '%Y-%m-%d %H:%M:%S'

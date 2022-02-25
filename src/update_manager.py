@@ -103,9 +103,9 @@ def update_process(line, local_addon_path, local_repository, remote_addon_path):
     updated_file = line[0]
     log.info("Thread %s: starting", line)
     # Sets up the path to the url containing the addon
-    updated_file_url = remote_addon_path+line[0]
+    updated_file_url = remote_addon_path + line[0]
     # Sets up the path to the url containing the addon
-    download_path = local_addon_path+'/'+line[0]
+    download_path = local_addon_path + '/' + line[0]
     # Provides the url to addon and addon path to the file_downloader function
     log.info('Requsting download of %s', updated_file_url)
     file_downloader(updated_file_url, download_path)

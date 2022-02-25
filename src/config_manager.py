@@ -44,8 +44,8 @@ def check_if_config_exists():
     log.debug('checking if configuration file exists')
     # Check if config file exists
     if os.path.isfile(CONFIG_LOCATION):
-        return 1
-    return 0
+        return True
+    return False
 
 
 def read_steam_registry(steam_reg_location):
@@ -335,7 +335,7 @@ def config_creator():
     config = configparser.ConfigParser(allow_no_value=True)
 
     # Check if data directory for program files exists
-    print('Checking if %s directory exists', DATA_DIRECTORY)
+    print(f'Checking if {DATA_DIRECTORY} directory exists')
     if not os.path.exists(DATA_DIRECTORY):
         log.info('%sdoes not exist, creating directories', DATA_DIRECTORY)
         os.makedirs(DATA_DIRECTORY)
@@ -404,7 +404,7 @@ def config_creator():
     config['LOGGING'] = {}
     config['LOGGING']['# Log file destination path'] = None
     config['LOGGING']['log_file_path'] = LOG_FILE_PATH
-    config['LOGGING']['Set logging level (Options: INFO, WARN, ERROR, DEBUG'] = None
+    config['LOGGING']['#Set logging level (Options: INFO, WARN, ERROR, DEBUG'] = None
     config['LOGGING']['log_level'] = LOG_LEVEL
 
     # Check if config directory for program files exists
@@ -435,14 +435,13 @@ def config_loader():
     log = default_logger()
     log.info('Loading configuration')
     config = configparser.ConfigParser()
+
     if os.name == 'nt':
-        log.info('Windows system detected')
-        # Path to config file
-        config_location = 'C:/ProgramData/pyModSync/pymodsync.properties'
+        log.debug('Windows system detected')
         # Reads the config file
-        log.info('Reading configuration from %s', config_location)
-        config.read(config_location)
-        print(f'Loading configuration from {config_location}')
+        log.info('Reading configuration from %s', CONFIG_LOCATION)
+        config.read(CONFIG_LOCATION)
+        print(f'Loading configuration from {CONFIG_LOCATION}')
         # Saves contents of config file to variables
         remote_repository_url = config['GENERAL']['remote_repository_url']
         local_repository = config['GENERAL']['local_repository']
@@ -467,10 +466,8 @@ def config_loader():
                 remote_repository_destination_path, local_addon_path, steam_exe_path,
                 arma_exe_path, log_level, log_file_path]
 
-    # Path to config file
-    config_location = USER_HOME + '/.config/pyModSync/pymodsync.properties'
     # Reads the config file
-    config.read(config_location)
+    config.read(CONFIG_LOCATION)
     # Saves contents of config file to variables
     remote_repository_url = config['GENERAL']['remote_repository_url']
     local_repository = config['GENERAL']['local_repository']
